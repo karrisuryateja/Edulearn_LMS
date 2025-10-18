@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard Test</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Leaderboard Test</h1>
+    
+    <div class="mb-3">
+      <label for="courseId" class="form-label">Course ID:</label>
+      <input type="text" class="form-control" id="courseId" placeholder="Enter course ID">
+      <button class="btn btn-primary mt-2" onclick="testLeaderboard()">Test Leaderboard</button>
+    </div>
+    
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:5000/api';
+    
+    function testLeaderboard() {
+      const courseId = document.getElementById('courseId').value;
+      if (!courseId) {
+        alert('Please enter a course ID');
+        return;
+      }
+      
+      // For testing purposes, we'll use a hardcoded token from our test user
+      // In a real application, you would get this from localStorage after login
+      const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyYmFmZmEyZjc5YTc0YWU4NDg0ZSIsIm5hbWUiOiJUZXN0IEZhY3VsdHkiLCJlbWFpbCI6ImZhY3VsdHlAdGVzdC5jb20iLCJyb2xlIjoiZmFjdWx0eSIsImlhdCI6MTczMDAwMDAwMCwiZXhwIjoxNzMwMDA0MDAwfQ.fake_token';
+      
+      document.getElementById('result').innerHTML = '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>';
+      
+      fetch(API_BASE_URL + '/leaderboard/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch leaderboard: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+      })
+      .catch(error => {
+        document.getElementById('result').innerHTML = '<div class="alert alert-danger">Error: ' + error.message + '</div>';
+      });
+    }
+  </script>
+</body>
+</html>

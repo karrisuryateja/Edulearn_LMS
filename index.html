@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome to EduLearn LMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --primary-dark: #0b5ed7;
+      --primary-light: #e6f0ff;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --info: #17a2b8;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark-blue: #003366;
+      --light-blue: #f0f7ff;
+      --accent: #28a745;
+      --purple: #6f42c1;
+      --orange: #fd7e14;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+      background-image: url('https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      z-index: -1;
+    }
+
+    .hero-section {
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 5px solid var(--primary);
+    }
+
+    .hero-section:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 20%, rgba(255, 255, 255, 0.7) 90%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: left;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .hero-section h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      color: var(--dark-blue);
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--dark-blue), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-section p {
+      font-size: 1.4rem;
+      margin-bottom: 2.5rem;
+      color: #6c757d;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .feature-icon {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary-light), #ffffff);
+      border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: 2.5rem;
+      color: var(--primary);
+      border: 3px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-icon:after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .feature-card:hover .feature-icon:after {
+      transform: rotate(45deg) translate(50%, 50%);
+    }
+
+    footer {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      color: #333;
+      border-top: 5px solid var(--success);
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--success), var(--warning));
+    }
+
+    .feature-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .feature-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+    }
+
+    .feature-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-card .card-body {
+      padding: 2.5rem;
+    }
+
+    .feature-card h3 {
+      font-weight: 700;
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: #6c757d;
+      line-height: 1.7;
+    }
+
+    .cta-button {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-radius: 50px;
+      font-weight: 600;
+      padding: 14px 35px;
+      margin: 0 12px 12px 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      border: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      font-size: 1.1rem;
+    }
+
+    .cta-button:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.5s;
+      z-index: -1;
+    }
+
+    .cta-button:hover:before {
+      width: 100%;
+    }
+
+    .btn-primary.cta-button {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    }
+
+    .btn-success.cta-button {
+      background: linear-gradient(135deg, var(--success), #218838);
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-light {
+      background: linear-gradient(135deg, #ffffff, #f0f0f0);
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .btn-light:hover {
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      color: var(--primary-dark);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #218838);
+      border: 2px solid var(--success);
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #218838, #1e7e34);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    /* Section styling */
+    #features {
+      background: rgba(255, 255, 255, 0.95);
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 0;
+    }
+
+    #features:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjAuNSIgZmlsbD0iI2RkZCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+      opacity: 0.1;
+    }
+
+    #about {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 5rem 0;
+      border-top: 5px solid var(--warning);
+      border-bottom: 5px solid var(--purple);
+    }
+
+    #about .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    #about .section-title h2 {
+      font-weight: 800;
+      color: var(--dark-blue);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 15px;
+    }
+
+    #about .section-title h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 3px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-bottom: 3px solid var(--dark-blue);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: var(--dark-blue) !important;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .navbar-nav .nav-link {
+      color: #333 !important;
+      font-weight: 600;
+      border-radius: 8px;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      color: var(--primary-dark) !important;
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white !important;
+      box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+    }
+
+    .navbar-toggler {
+      border: none;
+      padding: 5px;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+
+    /* Section titles */
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-weight: 800;
+      color: var(--dark-blue);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 15px;
+      font-size: 2.5rem;
+    }
+
+    .section-title h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+      border-radius: 3px;
+    }
+
+    .section-title p {
+      font-size: 1.2rem;
+      color: #6c757d;
+      max-width: 700px;
+      margin: 1rem auto 0;
+      line-height: 1.7;
+    }
+
+    /* Stats section */
+    .stats-section {
+      background: linear-gradient(135deg, var(--dark-blue), #002244);
+      color: white;
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats-section:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.7) 90%);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stat-number {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #ffffff, #aaccff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 1.3rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 5rem 0;
+      border-top: 5px solid var(--info);
+    }
+
+    .testimonial-card {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: none;
+      margin: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--info));
+    }
+
+    .testimonial-card .quote {
+      font-size: 5rem;
+      color: var(--primary-light);
+      line-height: 1;
+      margin: 0;
+      font-family: Georgia, serif;
+    }
+
+    .testimonial-card .testimonial-content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #555;
+      margin: 1rem 0;
+      font-style: italic;
+    }
+
+    .testimonial-card .testimonial-author {
+      display: flex;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+
+    .testimonial-card .author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 15px;
+      border: 3px solid var(--primary);
+    }
+
+    .testimonial-card .author-info h5 {
+      margin: 0;
+      color: var(--dark-blue);
+      font-weight: 700;
+    }
+
+    .testimonial-card .author-info p {
+      margin: 0;
+      color: #6c757d;
+    }
+
+    /* Contact section */
+    .contact-section {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      padding: 5rem 0;
+      border-top: 5px solid var(--orange);
+    }
+
+    .contact-card {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      border: none;
+    }
+
+    .contact-info {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-right: 20px;
+      border: 2px solid var(--primary);
+    }
+
+    .contact-details h5 {
+      margin: 0 0 0.5rem 0;
+      color: var(--dark-blue);
+      font-weight: 700;
+    }
+
+    .contact-details p {
+      margin: 0;
+      color: #6c757d;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer .footer-content {
+      padding: 3rem 0 1rem;
+    }
+
+    footer .footer-logo {
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--dark-blue);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    footer .footer-links h5 {
+      color: var(--dark-blue);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    footer .footer-links h5:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    footer .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    footer .footer-links ul li {
+      margin-bottom: 0.8rem;
+    }
+
+    footer .footer-links ul li a {
+      color: #6c757d;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    footer .footer-links ul li a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+
+    footer .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 1.5rem;
+    }
+
+    footer .social-links a {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      border: 2px solid var(--primary);
+    }
+
+    footer .social-links a:hover {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      transform: translateY(-5px);
+    }
+
+    footer .copyright {
+      text-align: center;
+      padding: 1.5rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #dee2e6;
+      color: #6c757d;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .hero-section h1 {
+        font-size: 2.8rem;
+      }
+      
+      .hero-section p {
+        font-size: 1.2rem;
+      }
+      
+      .feature-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 2rem;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .stat-number {
+        font-size: 2.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        height: auto;
+        padding: 5rem 0;
+      }
+      
+      .hero-section h1 {
+        font-size: 2.3rem;
+      }
+      
+      .hero-section p {
+        font-size: 1.1rem;
+      }
+      
+      .feature-card .card-body {
+        padding: 1.8rem;
+      }
+      
+      .cta-button {
+        padding: 12px 25px;
+        font-size: 1rem;
+        margin: 0 8px 8px 0;
+      }
+      
+      .stat-number {
+        font-size: 2.3rem;
+      }
+      
+      .stat-label {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar-brand {
+        font-size: 1.5rem;
+      }
+      
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+      
+      .section-title h2 {
+        font-size: 1.8rem;
+      }
+      
+      .feature-card {
+        margin-bottom: 1.5rem;
+      }
+      
+      .feature-card .card-body {
+        padding: 1.5rem;
+      }
+      
+      .contact-card {
+        padding: 2rem;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating animation for hero elements */
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-delay-1 {
+      animation-delay: 0.5s;
+    }
+
+    .floating-delay-2 {
+      animation-delay: 1s;
+    }
+
+    .floating-delay-3 {
+      animation-delay: 1.5s;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">EduLearn LMS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-start" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="btn btn-outline-primary px-3" href="login.html">Login</a>
+          </li>
+          <li class="nav-item ms-2">
+            <a class="btn btn-outline-success px-3" href="register.html">Register</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section text-left d-flex align-items-center">
+    <div class="hero-content">
+      <h1 class="display-4 fw-bold">Empower Learning. Empower Growth.</h1>
+      <p class="lead">Create, manage, and explore courses with our professional LMS platform.</p>
+      <div class="cta-buttons">
+        <a href="login.html" class="btn btn-lg btn-light px-4 cta-button">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </a>
+        <a href="register.html" class="btn btn-lg btn-success px-4 cta-button">
+          <i class="bi bi-person-plus-fill me-2"></i>Register
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-5">
+    <div class="container">
+      <div class="content-section">
+        <h2 class="text-left mb-4">Features</h2>
+        <div class="row g-4 feature-row">
+          <div class="col-md-4 text-center">
+            <div class="card feature-card shadow-sm p-4">
+              <div class="feature-icon">
+                <i class="bi bi-mortarboard-fill"></i>
+              </div>
+              <h5>Faculty Dashboard</h5>
+              <p>Create and manage interactive courses with videos, PDFs, and more.</p>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="card feature-card shadow-sm p-4">
+              <div class="feature-icon">
+                <i class="bi bi-book-half"></i>
+              </div>
+              <h5>Student Learning</h5>
+              <p>Access learning materials, watch videos, and track your progress.</p>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="card feature-card shadow-sm p-4">
+              <div class="feature-icon">
+                <i class="bi bi-phone"></i>
+              </div>
+              <h5>Fully Responsive</h5>
+              <p>Optimized for all devices – desktop, tablet, and mobile.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row g-4 mt-4 feature-row">
+          <div class="col-md-4 text-center">
+            <div class="card feature-card shadow-sm p-4">
+              <div class="feature-icon">
+                <i class="bi bi-file-earmark-text"></i>
+              </div>
+              <h5>Assignments & Grading</h5>
+              <p>Create assignments, submit work, and receive feedback from instructors.</p>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="card feature-card shadow-sm p-4">
+              <div class="feature-icon">
+                <i class="bi bi-person-check"></i>
+              </div>
+              <h5>Course Enrollment</h5>
+              <p>Easily enroll in courses and track your enrolled classes.</p>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="card feature-card shadow-sm p-4">
+              <div class="feature-icon">
+                <i class="bi bi-shield-lock"></i>
+              </div>
+              <h5>Secure Login</h5>
+              <p>Secure user authentication for both students and faculty.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-5">
+    <div class="container">
+      <div class="content-section">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <div class="text-center" style="background: linear-gradient(135deg, #0d6efd, #6f42c1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); height: 400px; display: flex; align-items: center; justify-content: center;">
+              <i class="bi bi-laptop" style="font-size: 8rem; color: white;"></i>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h3>About EduLearn</h3>
+            <p>EduLearn LMS is a simple and powerful platform that connects mentors and learners. Whether you're a teacher wanting to share knowledge or a student eager to learn, our platform provides a seamless experience tailored to your needs.</p>
+            <ul>
+              <li>Easy course creation and management</li>
+              <li>Student-friendly dashboard with enrollment</li>
+              <li>Assignment creation, submission, and grading</li>
+              <li>Modern UI built with Bootstrap</li>
+              <li>Fully responsive design for all devices</li>
+            </ul>
+            <div class="cta-buttons">
+              <a href="login.html" class="btn btn-outline-primary mt-3">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+              </a>
+              <a href="register.html" class="btn btn-outline-success mt-3">
+                <i class="bi bi-person-plus-fill me-2"></i>Register
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-dark py-4">
+    <div class="container">
+      <p class="mb-0 text-center">&copy; 2025 EduLearn LMS. All rights reserved.</p>
+      <p class="mb-0 mt-2 text-center"><small>Learning Management System</small></p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

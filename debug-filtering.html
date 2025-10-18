@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Filtering</title>
+</head>
+<body>
+    <h1>Debug Filtering</h1>
+    <button onclick="testFiltering()">Test Filtering</button>
+    <div id="results"></div>
+    
+    <script>
+        function testFiltering() {
+            // Simulate the user data
+            const loggedInUser = {
+                "id": "68f12c5cdc73bcc50d5a60d3",
+                "name": "Dr. Smith",
+                "email": "dr.smith@university.edu",
+                "role": "faculty"
+            };
+            
+            // Simulate the courses data from the API
+            const courses = [
+                {
+                    "_id": "68f12baffa2f79a74ae84850",
+                    "title": "Test Course",
+                    "description": "This is a test course for API testing",
+                    "duration": 4,
+                    "video": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                    "faculty": {
+                        "_id": "68f12a79fa2f79a74ae84840",
+                        "name": "Test Faculty"
+                    },
+                    "materials": []
+                },
+                {
+                    "_id": "68f12c5cdc73bcc50d5a60da",
+                    "title": "Introduction to Computer Science",
+                    "description": "Learn the fundamentals of computer science including programming, algorithms, and data structures.",
+                    "duration": 12,
+                    "video": "https://www.youtube.com/watch?v=6JQZ9gEYjAU",
+                    "faculty": {
+                        "_id": "68f12c5cdc73bcc50d5a60d3",
+                        "name": "Dr. Smith"
+                    },
+                    "materials": []
+                }
+            ];
+            
+            console.log('Filtering courses for faculty ID:', loggedInUser.id);
+            console.log('All courses:', courses);
+            
+            // Apply the same filtering logic
+            const facultyCourses = courses.filter(course => {
+                console.log('Checking course:', course.title, 'with faculty:', course.faculty);
+                if (course.faculty && typeof course.faculty === 'object') {
+                    const result = course.faculty._id === loggedInUser.id;
+                    console.log('Object comparison result:', result);
+                    return result;
+                } else {
+                    const result = course.faculty === loggedInUser.id;
+                    console.log('ID comparison result:', result);
+                    return result;
+                }
+            });
+            
+            console.log('Filtered faculty courses:', facultyCourses);
+            
+            // Display results
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <h2>Test Results</h2>
+                <p>Faculty ID: ${loggedInUser.id}</p>
+                <p>Total courses: ${courses.length}</p>
+                <p>Faculty courses: ${facultyCourses.length}</p>
+                <p>Expected faculty courses: 1 (Introduction to Computer Science)</p>
+                <h3>Faculty Courses:</h3>
+                <ul>
+                    ${facultyCourses.map(course => `<li>${course.title}</li>`).join('')}
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>

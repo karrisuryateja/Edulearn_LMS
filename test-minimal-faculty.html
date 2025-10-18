@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal Faculty Test</title>
+</head>
+<body>
+    <h1>Minimal Faculty Test</h1>
+    <button onclick="testLoadCourses()">Load Courses</button>
+    <div id="courseList"></div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyYzVjZGM3M2JjYzUwZDVhNjBkMyIsImlhdCI6MTc2MDczNzA2MCwiZXhwIjoxNzYxMzQxODYwfQ.-7_LNmTCmhuzgmjWUMbgA2aEkMf2IGrRZFJ9vQ3dDCg";
+        let loggedInUser = {
+            "id": "68f12c5cdc73bcc50d5a60d3",
+            "name": "Dr. Smith",
+            "email": "dr.smith@university.edu",
+            "role": "faculty"
+        };
+        
+        function testLoadCourses() {
+            console.log('Loading courses...');
+            
+            const courseList = document.getElementById('courseList');
+            courseList.innerHTML = '<p>Loading courses...</p>';
+            
+            fetch(`${API_BASE_URL}/courses`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(courses => {
+                console.log('Courses received:', courses);
+                
+                // Apply filtering
+                const facultyCourses = courses.filter(course => {
+                    if (course.faculty && typeof course.faculty === 'object') {
+                        return course.faculty._id === loggedInUser.id;
+                    } else {
+                        return course.faculty === loggedInUser.id;
+                    }
+                });
+                
+                console.log('Faculty courses:', facultyCourses);
+                
+                if (facultyCourses.length === 0) {
+                    courseList.innerHTML = '<p>No courses found for this faculty.</p>';
+                } else {
+                    let html = '<h2>Faculty Courses:</h2><ul>';
+                    facultyCourses.forEach(course => {
+                        html += `<li>${course.title}</li>`;
+                    });
+                    html += '</ul>';
+                    courseList.innerHTML = html;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading courses:', error);
+                courseList.innerHTML = `<p>Error loading courses: ${error.message}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>

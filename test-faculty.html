@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Faculty Login</title>
+</head>
+<body>
+    <h1>Test Faculty Login</h1>
+    <button onclick="setLoginData()">Set Login Data</button>
+    <button onclick="goToFacultyPage()">Go to Faculty Page</button>
+    
+    <script>
+        function setLoginData() {
+            // Set the token and user data in localStorage
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyYzVjZGM3M2JjYzUwZDVhNjBkMyIsImlhdCI6MTc2MDczNzA2MCwiZXhwIjoxNzYxMzQxODYwfQ.-7_LNmTCmhuzgmjWUMbgA2aEkMf2IGrRZFJ9vQ3dDCg";
+            const user = {
+                "id": "68f12c5cdc73bcc50d5a60d3",
+                "name": "Dr. Smith",
+                "email": "dr.smith@university.edu",
+                "role": "faculty"
+            };
+            
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            alert('Login data set! Now go to the faculty page.');
+        }
+        
+        function goToFacultyPage() {
+            window.location.href = 'faculty.html';
+        }
+    </script>
+</body>
+</html>

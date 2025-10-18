@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - EduLearn LMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --primary-dark: #0b5ed7;
+      --primary-light: #e6f0ff;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --info: #17a2b8;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark-blue: #003366;
+      --light-blue: #f0f7ff;
+      --accent: #28a745;
+      --purple: #6f42c1;
+      --orange: #fd7e14;
+      --bg-gradient-start: #1a2a6c;
+      --bg-gradient-middle: #b21f1f;
+      --bg-gradient-end: #1a2a6c;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-middle), var(--bg-gradient-end));
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-bottom: 2px solid var(--dark-blue);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 0;
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.6rem;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .navbar-nav .nav-link {
+      color: var(--dark-blue) !important;
+      font-weight: 600;
+      border-radius: 8px;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 0.5rem 1rem;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      color: var(--primary-dark) !important;
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white !important;
+      box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+    }
+
+    .navbar-nav .nav-link.active:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .main-content {
+      padding-top: 80px; /* Add padding to account for fixed navbar */
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 1100px;
+      position: relative;
+      overflow: hidden;
+      border: none;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: row;
+    }
+
+    .login-container:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--purple), var(--success));
+    }
+
+    .left-panel {
+      background: linear-gradient(135deg, var(--dark-blue), #002244);
+      color: white;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .left-panel:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.7) 90%);
+    }
+
+    .left-panel:after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      animation: shine 8s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        transform: rotate(45deg) translateX(-100%);
+      }
+      100% {
+        transform: rotate(45deg) translateX(100%);
+      }
+    }
+
+    .carousel-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .carousel-content h2 {
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      font-size: 2.2rem;
+      background: linear-gradient(90deg, #ffffff, #aaccff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .carousel-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .feature-list {
+      text-align: left;
+      margin: 2rem 0;
+    }
+
+    .feature-list li {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .feature-list li i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+      color: var(--primary-light);
+    }
+
+    .carousel-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .right-panel {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header h3 {
+      font-weight: 700;
+      color: var(--dark-blue);
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+
+    .login-header p {
+      color: var(--secondary);
+      font-size: 1.1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      padding: 12px 25px;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+    }
+
+    .btn-primary:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.5s;
+      z-index: -1;
+    }
+
+    .btn-primary:hover:before {
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark), #094cca);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(13, 110, 253, 0.6);
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--dark-blue);
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-label:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      border-radius: 50%;
+      display: inline-block;
+      border: 2px solid var(--primary);
+    }
+
+    .form-control {
+      border-radius: 12px;
+      padding: 14px 20px;
+      border: 2px solid #e1e5eb;
+      transition: all 0.3s ease;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      font-size: 1rem;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      background: #ffffff;
+    }
+
+    .form-control-lg {
+      padding: 16px 20px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group-text {
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      border: 2px solid var(--primary);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .form-control {
+      border-left: none;
+      border-radius: 0 12px 12px 0;
+    }
+
+    .error-message {
+      color: var(--danger);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      display: none;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      border-radius: 8px;
+      border-left: 4px solid var(--danger);
+    }
+
+    .switch-form {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--light-blue), #ffffff);
+      border-radius: 15px;
+      border: 1px solid #dee2e6;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .switch-form a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .switch-form a:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    .switch-form a:hover:before {
+      width: 100%;
+    }
+
+    .switch-form a:hover {
+      color: var(--primary-dark);
+      text-decoration: none;
+    }
+
+    .loading {
+      display: none;
+    }
+
+    h4 {
+      color: var(--dark-blue);
+      font-weight: 700;
+      position: relative;
+      padding-left: 35px;
+      text-align: left;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h4 i {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .form-check {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-check-input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .form-check-label {
+      font-weight: 500;
+      margin-left: 8px;
+      color: var(--dark-blue);
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-bottom: 1.5rem;
+    }
+
+    .forgot-password a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .login-container {
+        flex-direction: column;
+      }
+      
+      .left-panel {
+        padding: 2rem;
+      }
+      
+      .right-panel {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main-content {
+        padding: 1rem;
+      }
+      
+      .login-container {
+        border-radius: 15px;
+      }
+      
+      .left-panel, .right-panel {
+        padding: 1.5rem;
+      }
+      
+      .carousel-content h2 {
+        font-size: 1.8rem;
+      }
+      
+      .carousel-content p {
+        font-size: 1rem;
+      }
+    }
+
+    /* Animation for form elements */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-element {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .form-element:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .form-element:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .form-element:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .form-element:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">EduLearn LMS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-start" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="bi bi-house-door me-1"></i>Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="login.html">
+              <i class="bi bi-box-arrow-in-right me-1"></i>Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register.html">
+              <i class="bi bi-person-plus me-1"></i>Register
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div class="login-container">
+      <div class="row g-0">
+        <!-- Left Panel with Carousel -->
+        <div class="col-md-6 d-none d-md-block">
+          <div class="left-panel">
+            <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="carousel-content">
+                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=300&q=80" alt="Online Learning" class="carousel-image">
+                    <h2>Empower Learning</h2>
+                    <p>Create, manage, and explore courses with our professional LMS platform.</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="carousel-content">
+                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=300&q=80" alt="Student Success" class="carousel-image">
+                    <h2>Student Success</h2>
+                    <p>Access learning materials, watch videos, and track your progress.</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="carousel-content">
+                    <img src="https://images.unsplash.com/photo-1589254065878-42c9da997008?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=300&q=80" alt="Assignment Management" class="carousel-image">
+                    <h2>Assignment Management</h2>
+                    <p>Create assignments, submit work, and receive feedback from instructors.</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="carousel-content">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=300&q=80" alt="Collaborative Learning" class="carousel-image">
+                    <h2>Collaborative Learning</h2>
+                    <p>Connect with instructors and peers through our discussion forums.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="3"></button>
+              </div>
+            </div>
+            
+            <div class="feature-list">
+              <ul class="list-unstyled">
+                <li><i class="bi bi-check-circle-fill"></i> Easy course creation and management</li>
+                <li><i class="bi bi-check-circle-fill"></i> Student-friendly dashboard with enrollment</li>
+                <li><i class="bi bi-check-circle-fill"></i> Assignment creation, submission, and grading</li>
+                <li><i class="bi bi-check-circle-fill"></i> Fully responsive design for all devices</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Panel with Login Form -->
+        <div class="col-md-6">
+          <div class="right-panel">
+            <div class="welcome-text">
+              <h1>Welcome Back</h1>
+              <p>Sign in to continue your learning journey</p>
+            </div>
+
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <div class="error-message" id="emailError"></div>
+              </div>
+
+              <div class="mb-4">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                <div class="error-message" id="passwordError"></div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 mb-3">
+                <span class="loading" id="loginFormLoading">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Signing In...
+                </span>
+                <span class="button-text">Sign In</span>
+              </button>
+            </form>
+
+            <div class="switch-form">
+              <p class="mb-0">Don't have an account? <a href="register.html">Register here</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // API Base URL
+    const API_BASE_URL = 'http://localhost:5000/api';
+
+    // Show loading state
+    function showLoading() {
+      const loading = document.getElementById('loginFormLoading');
+      const buttonText = document.querySelector('.button-text');
+      
+      if (loading && buttonText) {
+        loading.style.display = 'inline-block';
+        buttonText.style.display = 'none';
+        const submitButton = document.querySelector('button[type="submit"]');
+        if (submitButton) {
+          submitButton.disabled = true;
+        }
+      }
+    }
+
+    // Hide loading state
+    function hideLoading() {
+      const loading = document.getElementById('loginFormLoading');
+      const buttonText = document.querySelector('.button-text');
+      
+      if (loading && buttonText) {
+        loading.style.display = 'none';
+        buttonText.style.display = 'inline-block';
+        const submitButton = document.querySelector('button[type="submit"]');
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+      }
+    }
+
+    // Show error message
+    function showError(elementId, message) {
+      const errorElement = document.getElementById(elementId);
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+      }
+    }
+
+    // Hide error message
+    function hideError(elementId) {
+      const errorElement = document.getElementById(elementId);
+      if (errorElement) {
+        errorElement.style.display = 'none';
+      }
+    }
+
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      console.log('Login form submission started');
+      
+      // Get form values
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      console.log('Login values:', { email, password });
+      
+      // Reset errors
+      hideError('emailError');
+      hideError('passwordError');
+      
+      // Validate form
+      let isValid = true;
+      
+      if (!email) {
+        showError('emailError', 'Please enter your email');
+        isValid = false;
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        showError('emailError', 'Please enter a valid email address');
+        isValid = false;
+      }
+      
+      if (!password) {
+        showError('passwordError', 'Please enter your password');
+        isValid = false;
+      }
+      
+      console.log('Login form is valid:', isValid);
+      
+      if (!isValid) {
+        return;
+      }
+      
+      // Show loading
+      showLoading();
+      
+      try {
+        // Login user
+        console.log('Sending login request...');
+        const response = await fetch(API_BASE_URL + '/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+        
+        console.log('Login response status:', response.status);
+        const data = await response.json();
+        console.log('Login response data:', data);
+        
+        if (response.ok) {
+          // Store token and user info in localStorage
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          
+          // Redirect to appropriate dashboard based on role
+          if (data.user.role === 'faculty') {
+            window.location.href = 'faculty.html';
+          } else {
+            window.location.href = 'student.html';
+          }
+        } else {
+          // Handle errors
+          if (data.message) {
+            if (data.message.includes('Invalid credentials')) {
+              showError('emailError', 'Invalid email or password');
+            } else {
+              showError('emailError', data.message);
+            }
+          } else {
+            showError('emailError', 'Login failed. Please try again.');
+          }
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showError('emailError', 'Login failed. Please check your connection and try again.');
+      } finally {
+        hideLoading();
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,3791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Faculty Dashboard - EduLearn LMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --primary-dark: #0b5ed7;
+      --primary-light: #e6f0ff;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --info: #17a2b8;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark-blue: #003366;
+      --light-blue: #e6f0ff;
+      --accent: #28a745;
+      --purple: #6f42c1;
+      --orange: #fd7e14;
+      --bg-light: #f8f9fa;
+      --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      --card-shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      border-top: 5px solid var(--primary);
+      padding-top: 70px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-bottom: 2px solid var(--dark-blue);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.6rem;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .navbar-nav .nav-link {
+      color: var(--dark-blue) !important;
+      font-weight: 600;
+      border-radius: 8px;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      color: var(--primary-dark) !important;
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white !important;
+      box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+    }
+
+    .navbar-nav .nav-link.active:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .container {
+      flex-grow: 1;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    h2 {
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--dark-blue);
+      position: relative;
+      padding-bottom: 15px;
+      text-align: left;
+      font-size: 2rem;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+      border-radius: 3px;
+    }
+
+    /* Form */
+    form h4 {
+      color: var(--dark-blue);
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+      position: relative;
+      padding-left: 35px;
+      text-align: left;
+      font-size: 1.4rem;
+    }
+
+    form h4 i {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(135deg, var(--primary-light), #d1e2ff);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .card.assignment-card {
+      border-left: 5px solid var(--primary);
+    }
+
+    .card.assignment-card:hover {
+      border-left: 5px solid var(--purple);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary-light), #ffffff);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-weight: 700;
+      border-radius: 15px 15px 0 0 !important;
+      transition: all 0.3s ease;
+      border: none;
+      padding: 1.2rem 1.5rem;
+    }
+
+    .card-header:hover {
+      background: linear-gradient(135deg, #d1e2ff, var(--primary-light));
+    }
+
+    .card-header h4 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .card-header i {
+      transition: transform 0.3s ease;
+    }
+
+    .card-header:not(.collapsed) i.bi-chevron-down {
+      transform: rotate(180deg);
+    }
+
+    iframe {
+      border-radius: 12px;
+      border: 1px solid #dee2e6;
+    }
+
+    footer {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      color: #333;
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+      border-top: 3px solid var(--success);
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Button styles */
+    .btn {
+      border-radius: 50px;
+      font-weight: 600;
+      padding: 10px 20px;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.5s;
+      z-index: -1;
+    }
+
+    .btn:hover:before {
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark), #094cca);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #218838);
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #218838, #1e7e34);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+    }
+
+    .btn-info {
+      background: linear-gradient(135deg, var(--info), #138496);
+      box-shadow: 0 4px 15px rgba(23, 162, 184, 0.4);
+    }
+
+    .btn-info:hover {
+      background: linear-gradient(135deg, #138496, #117a8b);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(23, 162, 184, 0.6);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, var(--warning), #e0a800);
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+    }
+
+    .btn-warning:hover {
+      background: linear-gradient(135deg, #e0a800, #d39e00);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.6);
+    }
+
+    .btn-outline-primary {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+    }
+
+    .btn-outline-success {
+      border: 2px solid var(--success);
+      color: var(--success);
+      background: transparent;
+    }
+
+    .btn-outline-success:hover {
+      background: linear-gradient(135deg, var(--success), #218838);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-outline-info {
+      border: 2px solid var(--info);
+      color: var(--info);
+      background: transparent;
+    }
+
+    .btn-outline-info:hover {
+      background: linear-gradient(135deg, var(--info), #138496);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+    }
+
+    .btn-outline-secondary {
+      border: 2px solid var(--secondary);
+      color: var(--secondary);
+      background: transparent;
+    }
+
+    .btn-outline-secondary:hover {
+      background: linear-gradient(135deg, var(--secondary), #5a6268);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+    }
+
+    /* Form elements */
+    .form-control, .form-select {
+      border-radius: 10px;
+      padding: 12px 15px;
+      border: 2px solid #e1e5eb;
+      transition: all 0.3s ease;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      background: #ffffff;
+    }
+
+    .form-check-input:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Badges */
+    .badge {
+      font-weight: 600;
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+    }
+
+    .badge.bg-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+    }
+
+    .badge.bg-success {
+      background: linear-gradient(135deg, var(--success), #218838) !important;
+    }
+
+    .badge.bg-info {
+      background: linear-gradient(135deg, var(--info), #138496) !important;
+    }
+
+    /* Statistics cards */
+    .stat-card {
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      height: 100%;
+      border: none;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stat-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .stat-card.bg-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+    }
+
+    .stat-card.bg-success {
+      background: linear-gradient(135deg, var(--success), #218838) !important;
+    }
+
+    .stat-card.bg-info {
+      background: linear-gradient(135deg, var(--info), #138496) !important;
+    }
+
+    .stat-card.bg-warning {
+      background: linear-gradient(135deg, var(--warning), #e0a800) !important;
+    }
+
+    .stat-card .card-body {
+      padding: 1.8rem;
+    }
+
+    .stat-icon {
+      font-size: 2.8rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0.6rem 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    /* Tables */
+    .table {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table thead {
+      background: linear-gradient(135deg, var(--primary-light), #ffffff);
+    }
+
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      background-color: rgba(230, 240, 255, 0.3);
+    }
+
+    /* Modals */
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-light), #ffffff);
+      border-radius: 15px 15px 0 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1.2rem 1.5rem;
+    }
+
+    .modal-footer {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      border-radius: 0 0 15px 15px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Loading spinner */
+    .spinner-border {
+      width: 2rem;
+      height: 2rem;
+      border-width: 0.2em;
+    }
+
+    /* Welcome message */
+    #welcomeMessage {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      padding: 20px 25px;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+      font-weight: 600;
+      border: 1px solid #dee2e6;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #welcomeMessage:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+    }
+
+    /* Tabs */
+    .nav-tabs {
+      border-bottom: 2px solid #e1e5eb;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-tabs .nav-link {
+      border: none;
+      border-bottom: 3px solid transparent;
+      border-radius: 0;
+      font-weight: 600;
+      color: var(--secondary);
+      padding: 1rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link:hover {
+      color: var(--primary);
+      border-bottom: 3px solid #d1e2ff;
+    }
+
+    .nav-tabs .nav-link.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+      background: transparent;
+    }
+
+    /* Notification badge */
+    #notificationCount {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 0.7rem;
+      background: linear-gradient(135deg, var(--danger), #c82333);
+      min-width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 1.7rem;
+      }
+      
+      .stat-number {
+        font-size: 1.8rem;
+      }
+      
+      .navbar-nav .nav-link {
+        margin: 3px 0;
+      }
+      
+      .card {
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* Gradient backgrounds for different sections */
+    .assignments-section {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+
+    .forum-section {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+
+    .materials-section {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">EduLearn LMS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavFaculty" aria-controls="navbarNavFaculty" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-start" id="navbarNavFaculty">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="bi bi-house-door-fill me-1"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="faculty.html"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img id="navbarProfilePhoto" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+              <span id="navbarUserName">Faculty</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#" onclick="openProfileModal()"><i class="bi bi-person me-2"></i>Profile</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" id="logoutLink"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="container">
+    <h2 id="welcomeMessage">Welcome, Faculty</h2>
+    
+    <!-- Statistics Container -->
+    <div class="row statistics-container">
+      <div class="col-md-6 mb-4">
+        <div class="card stat-card bg-primary text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div class="stat-label">Students Enrolled</div>
+                <div class="stat-number" id="enrolledStudentsCount">0</div>
+              </div>
+              <i class="bi bi-people-fill stat-icon"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card stat-card bg-success text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div class="stat-label">Active Students</div>
+                <div class="stat-number" id="activeStudentsCount">0</div>
+              </div>
+              <i class="bi bi-person-check-fill stat-icon"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="facultyTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="my-courses-tab" data-bs-toggle="tab" data-bs-target="#my-courses" type="button" role="tab">My Courses</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="assignments-tab" data-bs-toggle="tab" data-bs-target="#assignments" type="button" role="tab">My Assignments</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="leaderboard-tab" data-bs-toggle="tab" data-bs-target="#leaderboard" type="button" role="tab">Leaderboard</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="forum-tab" data-bs-toggle="tab" data-bs-target="#forum" type="button" role="tab">Discussion Forum</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab">Course Materials</button>
+      </li>
+    </ul>
+
+    <!-- Tab content -->
+    <div class="tab-content" id="facultyTabContent">
+      <!-- My Courses Tab -->
+      <div class="tab-pane fade show active" id="my-courses" role="tabpanel">
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <h4>My Courses</h4>
+        </div>
+        
+        <!-- Collapsible Course Creation Form -->
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#courseFormContainer" aria-expanded="false" aria-controls="courseFormContainer" style="cursor: pointer;">
+            <h4 class="mb-0"><i class="bi bi-journal-plus me-2"></i>Create a New Course</h4>
+            <i class="bi bi-chevron-down"></i>
+          </div>
+          <div class="collapse" id="courseFormContainer">
+            <div class="card-body">
+              <form id="courseForm">
+                <div class="mb-3">
+                  <label for="courseTitle" class="form-label">Course Title</label>
+                  <input type="text" class="form-control" id="courseTitle" placeholder="Enter course title" required />
+                </div>
+                <div class="mb-3">
+                  <label for="courseDesc" class="form-label">Course Description</label>
+                  <textarea class="form-control" id="courseDesc" rows="3" placeholder="Brief description of the course" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="courseDuration" class="form-label">Course Duration (in weeks)</label>
+                  <input type="number" class="form-control" id="courseDuration" placeholder="Enter duration in weeks" min="1" required />
+                </div>
+                <div class="mb-3">
+                  <label for="courseVideo" class="form-label">YouTube Video Link (optional)</label>
+                  <input type="url" class="form-control" id="courseVideo" placeholder="https://www.youtube.com/watch?v=example" />
+                </div>
+                <div class="mb-3">
+                  <label for="courseMedia" class="form-label">Media Upload (optional)</label>
+                  <input type="file" class="form-control" id="courseMedia">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <span class="loading" id="courseFormLoading">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Creating...
+                  </span>
+                  <span class="button-text"><i class="bi bi-plus-circle me-1"></i> Create Course</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div id="courseList" class="row g-4">
+          <div class="col-12">
+            <div class="text-center">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assignments Tab -->
+      <div class="tab-pane fade" id="assignments" role="tabpanel">
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <h4>My Assignments</h4>
+        </div>
+        <div id="assignmentsTabContent" class="mt-2">
+          <div class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Leaderboard Tab -->
+      <div class="tab-pane fade" id="leaderboard" role="tabpanel">
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <h4>Course Leaderboard</h4>
+        </div>
+        <div class="mt-3">
+          <div class="mb-3">
+            <label for="facultyLeaderboardCourseSelect" class="form-label">Select Course</label>
+            <select class="form-select" id="facultyLeaderboardCourseSelect" onchange="loadFacultyLeaderboard()">
+              <option value="">Select a course</option>
+            </select>
+          </div>
+          
+          <div id="facultyLeaderboardContent">
+            <p class="text-muted">Please select a course to view the leaderboard.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Forum Tab -->
+      <div class="tab-pane fade" id="forum" role="tabpanel">
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <h4>Course Discussion Forum</h4>
+        </div>
+        <div class="mt-3">
+          <div class="mb-3">
+            <label for="facultyForumCourseSelect" class="form-label">Select Course</label>
+            <select class="form-select" id="facultyForumCourseSelect" onchange="loadSelectedCourseForum()">
+              <option value="">Select a course</option>
+            </select>
+          </div>
+          
+          <div id="facultyForumContent">
+            <div class="mb-3">
+              <label for="facultyForumPostTitle" class="form-label">Post Title</label>
+              <input type="text" class="form-control" id="facultyForumPostTitle" placeholder="Enter post title">
+            </div>
+            <div class="mb-3">
+              <label for="facultyForumPostContent" class="form-label">Post Content</label>
+              <textarea class="form-control" id="facultyForumPostContent" rows="4" placeholder="Enter your post content"></textarea>
+            </div>
+            <button class="btn btn-primary mb-3" onclick="addFacultyForumPost()">Add Post</button>
+            
+            <hr>
+            <h6>Discussion Posts</h6>
+            <div id="facultyForumPostsList">
+              <p class="text-muted">Please select a course to view discussion posts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Materials Tab -->
+      <div class="tab-pane fade" id="materials" role="tabpanel">
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <h4>Course Materials</h4>
+        </div>
+        <div class="mt-3">
+          <div class="mb-3">
+            <label for="materialsCourseSelect" class="form-label">Select Course</label>
+            <select class="form-select" id="materialsCourseSelect" onchange="loadSelectedCourseMaterials()">
+              <option value="">Select a course</option>
+            </select>
+          </div>
+          
+          <div id="materialsContent">
+            <div class="alert alert-info">
+              <h6><i class="bi bi-info-circle me-2"></i>Upload Course Materials</h6>
+              <p class="mb-1">You can upload files of any type including:</p>
+              <ul class="mb-1">
+                <li>Documents: PDF, Word, PowerPoint, Excel</li>
+                <li>Images: JPG, PNG, GIF</li>
+                <li>Other files: ZIP, TXT, etc.</li>
+              </ul>
+              <p class="mb-0"><small>Maximum file size: 50MB</small></p>
+            </div>
+            <div class="mb-3">
+              <label for="materialTitle" class="form-label">Material Title</label>
+              <input type="text" class="form-control" id="materialTitle" placeholder="Enter material title">
+            </div>
+            <div class="mb-3">
+              <label for="materialFile" class="form-label">Select File</label>
+              <input type="file" class="form-control" id="materialFile">
+            </div>
+            <button class="btn btn-primary mb-3" onclick="uploadMaterial()">Upload Material</button>
+            
+            <hr>
+            <h6>Uploaded Materials</h6>
+            <div id="materialsList">
+              <p class="text-muted">Please select a course to view materials.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assignment Modal -->
+  <div class="modal fade" id="assignmentModal" tabindex="-1" aria-labelledby="assignmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="assignmentModalLabel">Create Assignment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="assignmentForm">
+            <input type="hidden" id="assignmentCourseId">
+            <div class="mb-3">
+              <label for="assignmentTitle" class="form-label">Assignment Title</label>
+              <input type="text" class="form-control" id="assignmentTitle" required>
+            </div>
+            <div class="mb-3">
+              <label for="assignmentDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="assignmentDescription" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="assignmentDueDate" class="form-label">Due Date</label>
+              <input type="date" class="form-control" id="assignmentDueDate" required>
+            </div>
+            <!-- AI Grading Section -->
+            <div class="card mb-3">
+              <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-robot me-2"></i>AI Grading Options</h6>
+              </div>
+              <div class="card-body">
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" id="enableAIGrading">
+                  <label class="form-check-label" for="enableAIGrading">
+                    Enable AI Grading
+                  </label>
+                  <div class="form-text">Automatically grade submissions using AI comparison with sample solution</div>
+                </div>
+                <div class="mb-3">
+                  <label for="sampleSolution" class="form-label">Sample Solution</label>
+                  <textarea class="form-control" id="sampleSolution" rows="4" placeholder="Enter the ideal solution for this assignment"></textarea>
+                  <div class="form-text">Provide a sample solution that the AI will use to grade student submissions</div>
+                </div>
+                <div class="mb-3">
+                  <label for="gradingCriteria" class="form-label">Grading Criteria (Optional)</label>
+                  <textarea class="form-control" id="gradingCriteria" rows="2" placeholder="Enter key concepts or keywords to look for (comma separated)"></textarea>
+                  <div class="form-text">Specify key concepts or keywords that should be present in student responses</div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <span class="loading" id="assignmentFormLoading">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Creating...
+              </span>
+              <span class="button-text">Create Assignment</span>
+            </button>
+          </form>
+          
+          <hr id="submissionsDivider">
+          <h5 id="submissionsHeading">Submissions</h5>
+          <div id="submissionsList">
+            <div class="text-center">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grade Modal -->
+  <div class="modal fade" id="gradeModal" tabindex="-1" aria-labelledby="gradeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="gradeModalLabel">Grade Assignment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="gradeForm">
+            <input type="hidden" id="gradeSubmissionId">
+            <div class="mb-3">
+              <label for="gradeScore" class="form-label">Score</label>
+              <input type="number" class="form-control" id="gradeScore" min="0" max="100" required>
+            </div>
+            <div class="mb-3">
+              <label for="gradeFeedback" class="form-label">Feedback</label>
+              <textarea class="form-control" id="gradeFeedback" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <span class="loading" id="gradeFormLoading">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Submitting...
+              </span>
+              <span class="button-text">Submit Grade</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forum Modal -->
+  <div class="modal fade" id="forumModal" tabindex="-1" aria-labelledby="forumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="forumModalLabel">Course Discussion Forum</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="forumCourseId">
+          <div class="mb-3">
+            <label for="forumPostTitle" class="form-label">Post Title</label>
+            <input type="text" class="form-control" id="forumPostTitle" placeholder="Enter post title">
+          </div>
+          <div class="mb-3">
+            <label for="forumPostContent" class="form-label">Post Content</label>
+            <textarea class="form-control" id="forumPostContent" rows="4" placeholder="Enter your post content"></textarea>
+          </div>
+          <button class="btn btn-primary mb-3" onclick="addForumPost()">Add Post</button>
+          
+          <hr>
+          <h6>Discussion Posts</h6>
+          <div id="forumPostsList">
+            <div class="text-center">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalLabel">Profile Settings</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="profileForm">
+            <div class="text-center mb-4">
+              <div class="position-relative d-inline-block">
+                <img id="profilePhotoPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Photo" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #0d6efd;">
+                <button type="button" class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle" style="width: 35px; height: 35px; padding: 0;" onclick="document.getElementById('profilePhotoInput').click()">
+                  <i class="bi bi-camera"></i>
+                </button>
+                <input type="file" id="profilePhotoInput" accept="image/*" class="d-none" onchange="previewProfilePhoto(event)">
+              </div>
+              <h5 class="mt-3 mb-0" id="profileUserName">Faculty Name</h5>
+              <p class="text-muted" id="profileUserEmail">faculty@example.com</p>
+            </div>
+            
+            <div class="mb-3">
+              <label for="profileName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="profileName" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="profileEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="profileEmail" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">
+              <span class="loading" id="profileFormLoading">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Updating...
+              </span>
+              <span class="button-text">Update Profile</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Materials Modal -->
+  <div class="modal fade" id="materialsModal" tabindex="-1" aria-labelledby="materialsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="materialsModalLabel">Course Materials</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="materialsCourseId">
+          <div class="mb-3">
+            <label for="modalMaterialTitle" class="form-label">Material Title</label>
+            <input type="text" class="form-control" id="modalMaterialTitle" placeholder="Enter material title">
+          </div>
+          <div class="mb-3">
+            <label for="modalMaterialFile" class="form-label">Upload File</label>
+            <input type="file" class="form-control" id="modalMaterialFile">
+          </div>
+          <button class="btn btn-primary mb-3" onclick="uploadMaterial()">Upload Material</button>
+          
+          <hr>
+          <h6>Uploaded Materials</h6>
+          <div id="materialsList">
+            <div class="text-center">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Course Modal -->
+  <div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCourseModalLabel">Edit Course</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editCourseForm">
+            <input type="hidden" id="editCourseId">
+            <div class="mb-3">
+              <label for="editCourseTitle" class="form-label">Course Title</label>
+              <input type="text" class="form-control" id="editCourseTitle" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCourseDesc" class="form-label">Course Description</label>
+              <textarea class="form-control" id="editCourseDesc" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="editCourseDuration" class="form-label">Course Duration (in weeks)</label>
+              <input type="number" class="form-control" id="editCourseDuration" min="1" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCourseVideo" class="form-label">YouTube Video Link (optional)</label>
+              <input type="url" class="form-control" id="editCourseVideo">
+            </div>
+            <div class="mb-3">
+              <label for="editCourseMedia" class="form-label">Media Upload (optional)</label>
+              <input type="file" class="form-control" id="editCourseMedia">
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <span class="loading" id="editCourseFormLoading">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Updating...
+              </span>
+              <span class="button-text">Update Course</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Modal -->
+  <div class="modal fade" id="notificationsModal" tabindex="-1" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationsModalLabel">Notifications</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="notificationsList">
+            <p class="text-muted">No notifications yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p class="mb-0">&copy; 2025 EduLearn LMS. All rights reserved.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // API Base URL
+    const API_BASE_URL = 'http://localhost:5000/api';
+    
+    let loggedInUser = null;
+    let authToken = null;
+
+    // Preview profile photo
+    function previewProfilePhoto(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('profilePhotoPreview').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Open profile modal
+    function openProfileModal() {
+      // Populate form with current user data
+      document.getElementById('profileName').value = loggedInUser.name;
+      document.getElementById('profileEmail').value = loggedInUser.email;
+      document.getElementById('profileUserName').textContent = loggedInUser.name;
+      document.getElementById('profileUserEmail').textContent = loggedInUser.email;
+      
+      // Set profile photo or default
+      const profilePhotoUrl = loggedInUser.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+      document.getElementById('profilePhotoPreview').src = profilePhotoUrl;
+      document.getElementById('navbarProfilePhoto').src = profilePhotoUrl;
+      
+      // Show modal
+      new bootstrap.Modal(document.getElementById('profileModal')).show();
+    }
+
+    // Handle profile form submission
+    document.getElementById('profileForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('profileName').value;
+      const email = document.getElementById('profileEmail').value;
+      const profilePhotoFile = document.getElementById('profilePhotoInput').files[0];
+      
+      showLoading('profileForm', 'profileFormLoading');
+      
+      try {
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        if (profilePhotoFile) {
+          formData.append('profilePhoto', profilePhotoFile);
+        }
+        
+        const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Update logged in user data
+          loggedInUser.name = data.name;
+          loggedInUser.email = data.email;
+          loggedInUser.profilePhoto = data.profilePhoto;
+          
+          // Update UI
+          document.getElementById('welcomeMessage').textContent = `Welcome, ${data.name}`;
+          document.getElementById('navbarUserName').textContent = data.name;
+          document.getElementById('profileUserName').textContent = data.name;
+          document.getElementById('profileUserEmail').textContent = data.email;
+          
+          // Update profile photos
+          const profilePhotoUrl = data.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+          document.getElementById('profilePhotoPreview').src = profilePhotoUrl;
+          document.getElementById('navbarProfilePhoto').src = profilePhotoUrl;
+          
+          // Update localStorage
+          localStorage.setItem('user', JSON.stringify(loggedInUser));
+          
+          // Close modal
+          bootstrap.Modal.getInstance(document.getElementById('profileModal')).hide();
+          
+          alert('Profile updated successfully!');
+        } else {
+          alert(data.message || 'Failed to update profile');
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('Failed to update profile');
+      } finally {
+        hideLoading('profileForm', 'profileFormLoading');
+      }
+    });
+
+    // Check if user is logged in
+    function checkAuth() {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user'));
+      
+      if (!token || !user || user.role !== 'faculty') {
+        window.location.href = 'login.html';
+        return false;
+      }
+      
+      authToken = token;
+      loggedInUser = user;
+      document.getElementById('welcomeMessage').textContent = `Welcome, ${user.name}`;
+      
+      // Set profile photo in navbar
+      const profilePhotoUrl = user.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+      document.getElementById('navbarProfilePhoto').src = profilePhotoUrl;
+      document.getElementById('navbarUserName').textContent = user.name;
+      
+      // Load notifications
+      loadNotifications();
+      
+      return true;
+    }
+
+    // Load notifications
+    function loadNotifications() {
+      // In a real implementation, this would fetch from the backend
+      // For now, we'll simulate with localStorage
+      const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      const notificationCount = document.getElementById('notificationCount');
+      
+      if (notifications.length > 0) {
+        notificationCount.textContent = notifications.length;
+        notificationCount.style.display = 'inline';
+      } else {
+        notificationCount.style.display = 'none';
+      }
+    }
+
+    // Show notifications
+    function showNotifications() {
+      const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      const notificationsList = document.getElementById('notificationsList');
+      
+      if (notifications.length === 0) {
+        notificationsList.innerHTML = '<p class="text-muted">No notifications yet.</p>';
+      } else {
+        let notificationsHtml = '<div class="list-group">';
+        notifications.forEach(notification => {
+          notificationsHtml += `
+            <div class="list-group-item">
+              <div class="d-flex justify-content-between">
+                <h6>${notification.title}</h6>
+                <small class="text-muted">${new Date(notification.date).toLocaleString()}</small>
+              </div>
+              <p>${notification.message}</p>
+            </div>
+          `;
+        });
+        notificationsHtml += '</div>';
+        
+        notificationsList.innerHTML = notificationsHtml;
+      }
+      
+      new bootstrap.Modal(document.getElementById('notificationsModal')).show();
+    }
+
+    // Add notification
+    function addNotification(title, message) {
+      const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      
+      notifications.unshift({
+        id: Date.now(),
+        title: title,
+        message: message,
+        date: new Date().toISOString(),
+        read: false
+      });
+      
+      // Keep only the last 20 notifications
+      if (notifications.length > 20) {
+        notifications.splice(20);
+      }
+      
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      loadNotifications();
+    }
+
+    // Function to load and display courses from API (faculty's courses)
+    function showCourses() {
+      if (!checkAuth()) return;
+      
+      const courseList = document.getElementById('courseList');
+      courseList.innerHTML = `
+        <div class="col-12">
+          <div class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      fetch(`${API_BASE_URL}/courses`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => response.json())
+      .then(courses => {
+        // Fixed the filtering logic - now correctly compares with the faculty ID
+        const facultyCourses = courses.filter(course => {
+          // Handle both cases where faculty might be an object or just an ID
+          if (course.faculty && typeof course.faculty === 'object') {
+            return course.faculty._id === loggedInUser.id;
+          } else {
+            return course.faculty === loggedInUser.id;
+          }
+        });
+        
+        if(facultyCourses.length === 0){
+          courseList.innerHTML = `
+            <div class="col-12">
+              <div class="card text-center p-5">
+                <div class="mb-3">
+                  <i class="bi bi-folder2-open" style="font-size: 3rem; color: #0d6efd;"></i>
+                </div>
+                <h5>No courses created yet</h5>
+                <p class="text-muted">Create your first course using the form above</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        courseList.innerHTML = '';
+        
+        facultyCourses.forEach((course, index) => {
+          // Use actual course materials from the course object
+          const courseMaterials = course.materials || [];
+          
+          courseList.innerHTML += `
+            <div class="col-md-12">
+              <div class="card p-3 shadow-sm">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h5><i class="bi bi-journal-text me-2 text-primary"></i>${course.title}</h5>
+                    <p>${course.description}</p>
+                    <p><small class="text-muted"><i class="bi bi-clock me-1"></i>Duration: ${course.duration} weeks</small></p>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="viewEnrollments('${course._id}')">
+                      <i class="bi bi-people me-1"></i> View Students
+                    </button>
+                    <button class="btn btn-sm btn-outline-success ms-2" onclick="openAssignmentModal('${course._id}')">
+                      <i class="bi bi-file-earmark-plus me-1"></i> Create Assignment
+                    </button>
+                    <button class="btn btn-sm btn-outline-info ms-2" onclick="openMaterialsModal('${course._id}')">
+                      <i class="bi bi-folder-plus me-1"></i> Materials
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary ms-2" onclick="openForumModal('${course._id}')">
+                      <i class="bi bi-chat me-1"></i> Forum
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning ms-2" onclick="openEditCourseModal('${course._id}')">
+                      <i class="bi bi-pencil me-1"></i> Edit
+                    </button>
+                  </div>
+                </div>
+                
+                ${
+                  course.video
+                    ? `<div class="mt-3">
+                        <h6><i class="bi bi-film me-2 text-info"></i>Course Video</h6>
+                        <div class="ratio ratio-16x9">
+                          <iframe src="${course.video.replace('watch?v=', 'embed/')}" 
+                                  title="Course Video" 
+                                  frameborder="0" 
+                                  allowfullscreen
+                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                          </iframe>
+                          <div style="display: none; background: linear-gradient(135deg, #0d6efd, #6f42c1); border-radius: 8px; height: 100%; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-film" style="font-size: 3rem; color: white;"></i>
+                          </div>
+                        </div>
+                      </div>`
+                    : ''
+                }
+                
+                ${courseMaterials.length > 0 ? 
+                  `<div class="mt-3">
+                    <h6><i class="bi bi-folder me-2 text-warning"></i>Course Materials (${courseMaterials.length})</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                      ${courseMaterials.map(material => `
+                        <span class="badge bg-warning text-dark">${material.title}</span>
+                      `).join('')}
+                    </div>
+                  </div>` : ''
+                }
+                
+                <div class="mt-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6><i class="bi bi-file-earmark-text me-2 text-success"></i>Assignments</h6>
+                    <span class="badge bg-primary">Click assignment to view submissions</span>
+                  </div>
+                  <div id="assignments-${course._id}">
+                    <div class="text-center">
+                      <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Load assignments for this course
+          loadAssignments(course._id);
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        courseList.innerHTML = `
+          <div class="col-12">
+            <div class="card text-center p-5">
+              <div class="mb-3">
+                <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem; color: #dc3545;"></i>
+              </div>
+              <h5>Failed to load courses</h5>
+              <p class="text-danger">Error: ${error.message}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Load assignments for a course
+    function loadAssignments(courseId) {
+      fetch(API_BASE_URL + '/assignments/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(assignments => {
+        console.log('Assignments for course', courseId, ':', assignments);
+        const assignmentsContainer = document.getElementById('assignments-' + courseId);
+        
+        if(!assignments || assignments.length === 0){
+          assignmentsContainer.innerHTML = '<p class="text-muted">No assignments created yet.</p>';
+          return;
+        }
+        
+        assignmentsContainer.innerHTML = assignments.map(assignment => '\
+          <div class="card assignment-card p-2 mb-2">\
+            <div class="d-flex justify-content-between">\
+              <div>\
+                <strong>' + assignment.title + '</strong>\
+                <p class="mb-1">' + assignment.description + '</p>\
+                <small class="text-muted">Due: ' + new Date(assignment.dueDate).toLocaleDateString() + '</small>\
+                ' + (assignment.enableAIGrading ? 
+                  '<span class="badge bg-success ms-2"><i class="bi bi-robot"></i> AI Grading Enabled</span>' : 
+                  '<span class="badge bg-secondary ms-2"><i class="bi bi-robot"></i> AI Grading Disabled</span>'
+                ) + '\
+              </div>\
+              <div class="btn-group" role="group">\
+                <button class="btn btn-sm btn-outline-primary" onclick="editAssignment(\'' + assignment._id + '\')">\
+                  <i class="bi bi-pencil"></i> Edit\
+                </button>\
+                <button class="btn btn-sm btn-outline-info" onclick="viewSubmissions(\'' + assignment._id + '\')">\
+                  <i class="bi bi-eye"></i> View Submissions\
+                </button>\
+              </div>\
+            </div>\
+          </div>\
+        ').join('');
+      })
+      .catch(error => {
+        console.error('Error loading assignments:', error);
+        document.getElementById('assignments-' + courseId).innerHTML = '<p class="text-danger">Failed to load assignments.</p>';
+      });
+    }
+
+    // Edit assignment
+    function editAssignment(assignmentId) {
+      // Fetch assignment details
+      fetch(`${API_BASE_URL}/assignments/${assignmentId}`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => response.json())
+      .then(assignment => {
+    // Load courses for forum and materials dropdowns
+    function loadCoursesForDropdowns() {
+      fetch(API_BASE_URL + '/courses', {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(courses => {
+        // Fixed the filtering logic - now correctly compares with the faculty ID
+        const facultyCourses = courses.filter(course => {
+          // Handle both cases where faculty might be an object or just an ID
+          if (course.faculty && typeof course.faculty === 'object') {
+            return course.faculty._id === loggedInUser.id;
+          } else {
+            return course.faculty === loggedInUser.id;
+          }
+        });
+        
+        // Populate forum course select
+        const forumSelect = document.getElementById('facultyForumCourseSelect');
+        forumSelect.innerHTML = '<option value="">Select a course</option>';
+        facultyCourses.forEach(course => {
+          forumSelect.innerHTML += '<option value="' + course._id + '">' + course.title + '</option>';
+        });
+        
+        // Populate materials course select
+        const materialsSelect = document.getElementById('materialsCourseSelect');
+        materialsSelect.innerHTML = '<option value="">Select a course</option>';
+        facultyCourses.forEach(course => {
+          materialsSelect.innerHTML += '<option value="' + course._id + '">' + course.title + '</option>';
+        });
+      })
+      .catch(error => {
+        console.error('Error loading courses for dropdowns:', error);
+      });
+    }
+
+    // Load selected course forum
+    function loadFacultyForum() {
+      const courseId = document.getElementById('facultyForumCourseSelect').value;
+      if (!courseId) {
+        document.getElementById('facultyForumContent').innerHTML = '\
+          <div class="card text-center p-5">\
+            <div class="mb-3">\
+              <i class="bi bi-info-circle" style="font-size: 3rem; color: #6c757d;"></i>\
+            </div>\
+            <h5>Select a Course</h5>\
+            <p class="text-muted">Please select a course to view the forum</p>\
+          </div>\
+        ';
+        return;
+      }
+      
+      // Show loading indicator
+      document.getElementById('facultyForumContent').innerHTML = '\
+        <div class="text-center">\
+          <div class="spinner-border" role="status">\
+            <span class="visually-hidden">Loading...</span>\
+          </div>\
+        </div>\
+      ';
+      
+      // Fetch forum data
+      fetch(API_BASE_URL + '/forum/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('No forum data found for this course');
+          }
+          throw new Error('Failed to fetch forum: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(forum => {
+        // Display forum data
+        document.getElementById('facultyForumContent').innerHTML = '\
+          <div class="card">\
+            <div class="card-header">\
+              <h5>' + forum.title + '</h5>\
+            </div>\
+            <div class="card-body">\
+              <p>' + forum.description + '</p>\
+            </div>\
+          </div>\
+        ';
+      })
+      .catch(error => {
+        console.error('Error loading forum:', error);
+        document.getElementById('facultyForumContent').innerHTML = '\
+          <div class="card text-center p-5">\
+            <div class="mb-3">\
+              <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #dc3545;"></i>\
+            </div>\
+            <h5>Error</h5>\
+            <p class="text-danger">' + error.message + '</p>\
+          </div>\
+        ';
+      });
+    }
+
+    // Load courses for leaderboard dropdown
+    function loadCoursesForLeaderboard() {
+      fetch(API_BASE_URL + '/courses', {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(courses => {
+        const facultyCourses = courses.filter(course => {
+          // Handle both cases where faculty might be an object or just an ID
+          if (course.faculty && typeof course.faculty === 'object') {
+            return course.faculty._id === loggedInUser.id;
+          } else {
+            return course.faculty === loggedInUser.id;
+          }
+        });
+        
+        // Populate leaderboard course select
+        const leaderboardSelect = document.getElementById('facultyLeaderboardCourseSelect');
+        leaderboardSelect.innerHTML = '<option value="">Select a course</option>';
+        facultyCourses.forEach(course => {
+          const option = document.createElement('option');
+          option.value = course._id;
+          option.textContent = course.title;
+          leaderboardSelect.appendChild(option);
+        });
+      })
+      .catch(error => {
+        console.error('Error loading courses for leaderboard:', error);
+      });
+    }
+
+    // Load leaderboard for selected course (faculty view)
+    function loadFacultyLeaderboard() {
+      const courseId = document.getElementById('facultyLeaderboardCourseSelect').value;
+      if (!courseId) {
+        document.getElementById('facultyLeaderboardContent').innerHTML = '\
+          <div class="card text-center p-5">\
+            <div class="mb-3">\
+              <i class="bi bi-info-circle" style="font-size: 3rem; color: #6c757d;"></i>\
+            </div>\
+            <h5>Select a Course</h5>\
+            <p class="text-muted">Please select a course to view the leaderboard</p>\
+          </div>\
+        ';
+        return;
+      }
+      
+      // Show loading indicator
+      document.getElementById('facultyLeaderboardContent').innerHTML = '\
+        <div class="text-center">\
+          <div class="spinner-border" role="status">\
+            <span class="visually-hidden">Loading...</span>\
+          </div>\
+        </div>\
+      ';
+      
+      // Fetch leaderboard data
+      fetch(API_BASE_URL + '/leaderboard/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('No leaderboard data found for this course');
+          }
+          throw new Error('Failed to fetch leaderboard: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(leaderboard => {
+        // Display leaderboard data
+        document.getElementById('facultyLeaderboardContent').innerHTML = '\
+          <div class="card">\
+            <div class="card-header">\
+              <h5>' + leaderboard.title + '</h5>\
+            </div>\
+            <div class="card-body">\
+              <p>' + leaderboard.description + '</p>\
+            </div>\
+          </div>\
+        ';
+      })
+      .catch(error => {
+        console.error('Error loading leaderboard:', error);
+        document.getElementById('facultyLeaderboardContent').innerHTML = '\
+          <div class="card text-center p-5">\
+            <div class="mb-3">\
+              <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #dc3545;"></i>\
+            </div>\
+            <h5>Error</h5>\
+            <p class="text-danger">' + error.message + '</p>\
+          </div>\
+        ';
+      });
+    }
+
+    // Load courses for materials dropdown
+    function loadCoursesForMaterials() {
+      fetch(API_BASE_URL + '/courses', {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(courses => {
+        const facultyCourses = courses.filter(course => {
+          // Handle both cases where faculty might be an object or just an ID
+          if (course.faculty && typeof course.faculty === 'object') {
+            return course.faculty._id === loggedInUser.id;
+          } else {
+            return course.faculty === loggedInUser.id;
+          }
+        });
+        
+        // Populate materials course select
+        const materialsSelect = document.getElementById('materialsCourseSelect');
+        materialsSelect.innerHTML = '<option value="">Select a course</option>';
+        facultyCourses.forEach(course => {
+          materialsSelect.innerHTML += '<option value="' + course._id + '">' + course.title + '</option>';
+        });
+      })
+      .catch(error => {
+        console.error('Error loading courses for materials:', error);
+      });
+    }
+
+    // Load selected course materials
+    function loadFacultyMaterials() {
+      const courseId = document.getElementById('materialsCourseSelect').value;
+      if (!courseId) {
+        document.getElementById('materialsContent').innerHTML = '\
+          <div class="card text-center p-5">\
+            <div class="mb-3">\
+              <i class="bi bi-info-circle" style="font-size: 3rem; color: #6c757d;"></i>\
+            </div>\
+            <h5>Select a Course</h5>\
+            <p class="text-muted">Please select a course to view the materials</p>\
+          </div>\
+        ';
+        return;
+      }
+      
+      // Show loading indicator
+      document.getElementById('materialsContent').innerHTML = '\
+        <div class="text-center">\
+          <div class="spinner-border" role="status">\
+            <span class="visually-hidden">Loading...</span>\
+          </div>\
+        </div>\
+      ';
+      
+      // Fetch materials data
+      fetch(API_BASE_URL + '/materials/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('No materials data found for this course');
+          }
+          throw new Error('Failed to fetch materials: ' + response.status + ' ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(materials => {
+        // Display materials data
+        document.getElementById('materialsContent').innerHTML = '\
+          <div class="card">\
+            <div class="card-header">\
+              <h5>' + materials.title + '</h5>\
+            </div>\
+            <div class="card-body">\
+              <p>' + materials.description + '</p>\
+            </div>\
+          </div>\
+        ';
+      })
+      .catch(error => {
+        console.error('Error loading materials:', error);
+        document.getElementById('materialsContent').innerHTML = '\
+          <div class="card text-center p-5">\
+            <div class="mb-3">\
+              <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #dc3545;"></i>\
+            </div>\
+            <h5>Error</h5>\
+            <p class="text-danger">' + error.message + '</p>\
+          </div>\
+        ';
+      });
+    }
+
+    // Load courses for forum and materials dropdowns
+    loadCoursesForDropdowns();
+
+    // Load courses for leaderboard dropdown
+    loadCoursesForLeaderboard();
+
+    // Load courses for materials dropdown
+    loadCoursesForMaterials();
+
+    // Event listeners for forum and materials dropdowns
+    document.getElementById('facultyForumCourseSelect').addEventListener('change', loadFacultyForum);
+    document.getElementById('materialsCourseSelect').addEventListener('change', loadFacultyMaterials);
+
+    // Event listener for leaderboard dropdown
+    document.getElementById('facultyLeaderboardCourseSelect').addEventListener('change', loadFacultyLeaderboard);
+
+    // Load selected course forum
+        return response.json();
+      })
+      .then(leaderboard => {
+        console.log('Leaderboard data:', leaderboard);
+        
+        if (!leaderboard || leaderboard.length === 0) {
+          document.getElementById('facultyLeaderboardContent').innerHTML = '\
+            <div class="card text-center p-5">\
+              <div class="mb-3">\
+                <i class="bi bi-trophy" style="font-size: 3rem; color: #ffc107;"></i>\
+              </div>\
+              <h5>No Leaderboard Data</h5>\
+              <p class="text-muted">No graded submissions found for this course yet</p>\
+            </div>\
+          ';
+          return;
+        }
+        
+        // Generate leaderboard table
+        let leaderboardHtml = '\
+          <div class="card">\
+            <div class="card-header bg-primary text-white">\
+              <h5 class="mb-0"><i class="bi bi-trophy me-2"></i>Course Leaderboard</h5>\
+            </div>\
+            <div class="card-body">\
+              <div class="table-responsive">\
+                <table class="table table-striped table-hover">\
+                  <thead class="table-dark">\
+                    <tr>\
+                      <th scope="col">Rank</th>\
+                      <th scope="col">Student</th>\
+                      <th scope="col">Score</th>\
+                      <th scope="col">Assignment</th>\
+                      <th scope="col">Submission Date</th>\
+                    </tr>\
+                  </thead>\
+                  <tbody>\
+        ';
+        
+        leaderboard.forEach((entry, index) => {
+          // Determine medal color based on rank
+          let medal = '';
+          if (entry.rank === 1) {
+            medal = '<i class="bi bi-trophy-fill text-warning me-1"></i>';
+          } else if (entry.rank === 2) {
+            medal = '<i class="bi bi-trophy-fill text-secondary me-1"></i>';
+          } else if (entry.rank === 3) {
+            medal = '<i class="bi bi-trophy-fill text-danger me-1"></i>';
+          }
+          
+          // Get profile photo or default
+          const profilePhotoUrl = entry.studentProfilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+          
+          leaderboardHtml += '\
+            <tr>\
+              <td>' + medal + entry.rank + '</td>\
+              <td>\
+                <div class="d-flex align-items-center">\
+                  <img src="' + profilePhotoUrl + '" alt="Profile" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">\
+                  <span>' + entry.studentName + '</span>\
+                </div>\
+              </td>\
+              <td><span class="badge bg-success">' + entry.score + '/100</span></td>\
+              <td>' + entry.assignmentTitle + '</td>\
+              <td>' + new Date(entry.submissionDate).toLocaleString() + '</td>\
+            </tr>\
+          ';
+        });
+        
+        leaderboardHtml += '\
+                  </tbody>\
+                </table>\
+              </div>\
+            </div>\
+          </div>\
+        ';
+        
+        document.getElementById('facultyLeaderboardContent').innerHTML = leaderboardHtml;
+      })
+      .catch(error => {
+        console.error('Error loading leaderboard:', error);
+        document.getElementById('facultyLeaderboardContent').innerHTML = '\
+          <div class="card text-center p-5">\
+            <div class="mb-3">\
+              <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem; color: #dc3545;"></i>\
+            </div>\
+            <h5>Leaderboard Unavailable</h5>\
+            <p class="text-danger">Error: ' + error.message + '</p>\
+            <button class="btn btn-primary" onclick="loadFacultyLeaderboard()">\
+              <i class="bi bi-arrow-repeat me-1"></i>Retry\
+            </button>\
+          </div>\
+        ';
+      });
+    }
+
+    // View enrollments for a course
+    function viewEnrollments(courseId) {
+      // Fetch enrollments from the backend
+      fetch(API_BASE_URL + '/enrollments/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(enrollments => {
+        // Create a modal to display enrollments
+        let modalHtml = `
+          <div class="modal fade" id="enrollmentsModal" tabindex="-1" aria-labelledby="enrollmentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="enrollmentsModalLabel">Enrolled Students</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Student</th>
+                          <th>Email</th>
+                          <th>Enrollment Date</th>
+                          <th>Streak</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+        `;
+        
+        if (enrollments.length === 0) {
+          modalHtml += `
+            <tr>
+              <td colspan="4" class="text-center">No students enrolled yet.</td>
+            </tr>
+          `;
+        } else {
+          enrollments.forEach(function(enrollment, index) {
+            // Get profile photo or default
+            const profilePhotoUrl = enrollment.student.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            
+            modalHtml += `
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="${profilePhotoUrl}" alt="Profile" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                    <span>${enrollment.student.name}</span>
+                  </div>
+                </td>
+                <td>${enrollment.student.email}</td>
+                <td>${new Date(enrollment.createdAt).toLocaleDateString()}</td>
+                <td>${enrollment.streak || 0} days</td>
+              </tr>
+            `;
+          });
+        }
+        
+        modalHtml += `
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add modal to body
+        if (document.getElementById('enrollmentsModal')) {
+          document.getElementById('enrollmentsModal').remove();
+        }
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Show the modal
+        new bootstrap.Modal(document.getElementById('enrollmentsModal')).show();
+        
+        // Remove modal from DOM when closed
+        document.getElementById('enrollmentsModal').addEventListener('hidden.bs.modal', function () {
+          document.getElementById('enrollmentsModal').remove();
+        });
+      })
+      .catch(function(error) {
+        console.error('Error fetching enrollments:', error);
+        alert('Failed to fetch enrollments: ' + error.message);
+      });
+    }
+
+        // Pre-fill the assignment form with existing data
+        document.getElementById('assignmentModalLabel').textContent = 'Edit Assignment';
+        document.getElementById('assignmentCourseId').value = assignment.course._id;
+        document.getElementById('assignmentTitle').value = assignment.title;
+        document.getElementById('assignmentDescription').value = assignment.description;
+        document.getElementById('assignmentDueDate').value = assignment.dueDate.split('T')[0]; // Format date
+        
+        // Set AI grading fields
+        document.getElementById('enableAIGrading').checked = assignment.enableAIGrading;
+        document.getElementById('sampleSolution').value = assignment.sampleSolution || '';
+        document.getElementById('gradingCriteria').value = assignment.gradingCriteria || '';
+        
+        // Show the form and hide submissions section
+        document.getElementById('assignmentForm').style.display = 'block';
+        document.getElementById('submissionsDivider').style.display = 'none';
+        document.getElementById('submissionsHeading').style.display = 'none';
+        document.getElementById('submissionsList').innerHTML = '';
+        
+        // Add a hidden field to track we're editing
+        let hiddenIdField = document.getElementById('editingAssignmentId');
+        if (!hiddenIdField) {
+          hiddenIdField = document.createElement('input');
+          hiddenIdField.type = 'hidden';
+          hiddenIdField.id = 'editingAssignmentId';
+          document.getElementById('assignmentForm').appendChild(hiddenIdField);
+        }
+        hiddenIdField.value = assignmentId;
+        
+        // Show the modal
+        new bootstrap.Modal(document.getElementById('assignmentModal')).show();
+      })
+      .catch(error => {
+        console.error('Error loading assignment:', error);
+        alert('Failed to load assignment details.');
+      });
+    }
+
+    // View submissions for an assignment
+    function viewSubmissions(assignmentId) {
+      // Debug: Log the assignment ID to console
+      console.log('Viewing submissions for assignment ID:', assignmentId);
+      
+      // Validate assignmentId
+      if (!assignmentId) {
+        console.error('Invalid assignment ID');
+        return;
+      }
+      
+      // Update modal to submissions view mode
+      document.getElementById('assignmentModalLabel').textContent = 'Assignment Submissions';
+      document.getElementById('assignmentForm').style.display = 'none';
+      document.getElementById('submissionsDivider').style.display = 'block';
+      document.getElementById('submissionsHeading').style.display = 'block';
+      
+      // Show loading indicator
+      document.getElementById('submissionsList').innerHTML = `
+        <div class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      `;
+      
+      // Show the modal
+      const modal = new bootstrap.Modal(document.getElementById('assignmentModal'));
+      modal.show();
+      
+      // Check if authToken exists
+      if (!authToken) {
+        console.error('No auth token found');
+        document.getElementById('submissionsList').innerHTML = '<p class="text-danger">Authentication error. Please log in again.</p>';
+        return;
+      }
+      
+      // Fetch and display submissions
+      fetch(`${API_BASE_URL}/submissions/assignment/${assignmentId}`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => {
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(submissions => {
+        console.log('Submissions data:', submissions);
+        let submissionsHtml = '';
+        if (!submissions || submissions.length === 0) {
+          submissionsHtml = '<p class="text-muted">No submissions yet.</p>';
+        } else {
+          submissionsHtml = '<div class="table-responsive"><table class="table table-striped"><thead><tr><th>Student</th><th>Submission Date</th><th>Submission</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+          
+          submissions.forEach(submission => {
+            // Ensure student object exists
+            const studentName = submission.student && submission.student.name ? submission.student.name : 'Unknown Student';
+            const submissionText = submission.submissionText || 'No submission text';
+            
+            submissionsHtml += `
+              <tr>
+                <td>${studentName}</td>
+                <td>${new Date(submission.createdAt).toLocaleDateString()}</td>
+                <td><button class="btn btn-sm btn-outline-info" onclick="showSubmissionText('${submission._id}')">View</button></td>
+                <td>${submission.grade && submission.grade.score !== undefined ? (submission.grade.isAIGrade ? 'AI Graded' : 'Graded') : 'Pending'}</td>
+                <td>
+                  ${submission.grade && submission.grade.score !== undefined ? 
+                    `<div class="d-flex flex-column align-items-start">
+                      <span class="badge bg-success mb-1">${submission.grade.score}/100</span>
+                      ${submission.grade.isAIGrade ? 
+                        `<div class="btn-group btn-group-sm" role="group">
+                          <button class="btn btn-outline-primary" onclick="reEvaluateSubmission('${submission._id}', '${assignmentId}')">Re-evaluate</button>
+                        </div>` : 
+                        `<div class="btn-group btn-group-sm" role="group">
+                          <button class="btn btn-outline-success" onclick="aiGradeSubmission('${submission._id}', '${assignmentId}')">AI Grade</button>
+                        </div>`
+                      }
+                    </div>` :
+                    `<div class="btn-group" role="group">
+                      <button class="btn btn-sm btn-primary" onclick="openGradeModal('${submission._id}')">Manual Grade</button>
+                      <button class="btn btn-sm btn-success" onclick="aiGradeSubmission('${submission._id}', '${assignmentId}')">AI Grade</button>
+                    </div>`
+                  }
+                </td>
+              </tr>
+            `;
+          });
+          
+          submissionsHtml += '</tbody></table></div>';
+          
+          // Add hidden divs to store submission texts
+          submissionsHtml += '<div id="submissionTexts" style="display:none;">';
+          submissions.forEach(submission => {
+            submissionsHtml += `<div id="submission-${submission._id}">${submission.submissionText || 'No submission text'}</div>`;
+          });
+          submissionsHtml += '</div>';
+        }
+        
+        document.getElementById('submissionsList').innerHTML = submissionsHtml;
+      })
+      .catch(error => {
+        console.error('Error fetching submissions:', error);
+        document.getElementById('submissionsList').innerHTML = `<p class="text-danger">Failed to load submissions: ${error.message}</p>`;
+      });
+    }
+
+    // AI Grade submission
+    function aiGradeSubmission(submissionId, assignmentId) {
+      // Confirm with user before AI grading
+      if (!confirm('Are you sure you want to grade this submission with AI? This will automatically assign a score based on the sample solution.')) {
+        return;
+      }
+      
+      fetch(`${API_BASE_URL}/submissions/${submissionId}/ai-grade`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => {
+        // Check if response is OK before trying to parse JSON
+        if (!response.ok) {
+          return response.text().then(text => {
+            // Try to parse as JSON, but if it fails, return the text
+            try {
+              return JSON.parse(text);
+            } catch (e) {
+              // If it's not JSON, it might be an HTML error page
+              throw new Error(`HTTP ${response.status}: ${text.substring(0, 100)}...`);
+            }
+          }).then(err => { throw new Error(err.message || 'Unknown error'); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const score = data.submission.grade && data.submission.grade.score !== undefined ? data.submission.grade.score : 'N/A';
+        alert(`Submission AI graded successfully!\nScore: ${score}/100`);
+        // Refresh submissions
+        viewSubmissions(assignmentId);
+      })
+      .catch(error => {
+        console.error('Error AI grading submission:', error);
+        alert(`Failed to AI grade submission: ${error.message}`);
+      });
+    }
+
+    // Re-evaluate submission with AI
+    function reEvaluateSubmission(submissionId, assignmentId) {
+      // Confirm with user before re-evaluating
+      if (!confirm('Are you sure you want to re-evaluate this submission with AI? This will overwrite the current AI grade.')) {
+        return;
+      }
+      
+      fetch(`${API_BASE_URL}/submissions/${submissionId}/ai-grade`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => {
+        // Check if response is OK before trying to parse JSON
+        if (!response.ok) {
+          return response.text().then(text => {
+            // Try to parse as JSON, but if it fails, return the text
+            try {
+              return JSON.parse(text);
+            } catch (e) {
+              // If it's not JSON, it might be an HTML error page
+              throw new Error(`HTTP ${response.status}: ${text.substring(0, 100)}...`);
+            }
+          }).then(err => { throw new Error(err.message || 'Unknown error'); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const score = data.submission.grade && data.submission.grade.score !== undefined ? data.submission.grade.score : 'N/A';
+        alert(`Submission re-evaluated successfully!\nScore: ${score}/100`);
+        // Refresh submissions
+        viewSubmissions(assignmentId);
+      })
+      .catch(error => {
+        console.error('Error re-evaluating submission:', error);
+        alert(`Failed to re-evaluate submission: ${error.message}`);
+      });
+    }
+
+    // Show submission text in a modal
+    function showSubmissionText(submissionId) {
+      // First, remove any existing submission text modals to prevent duplicates
+      const existingModal = document.getElementById('submissionTextModal');
+      if (existingModal) {
+        // If there's an existing modal, properly dispose of it using Bootstrap's modal instance
+        const modalInstance = bootstrap.Modal.getInstance(existingModal);
+        if (modalInstance) {
+          modalInstance.dispose();
+        }
+        existingModal.remove();
+      }
+      
+      const submissionText = document.getElementById(`submission-${submissionId}`).textContent;
+      
+      // Create a modal for displaying submission text
+      const modalHtml = `
+        <div class="modal fade" id="submissionTextModal" tabindex="-1" aria-labelledby="submissionTextModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="submissionTextModalLabel">Student Submission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <pre style="white-space: pre-wrap;">${submissionText}</pre>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Add modal to body
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      
+      // Get the newly created modal element
+      const modalElement = document.getElementById('submissionTextModal');
+      
+      // Show the modal
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+      
+      // Ensure proper cleanup when modal is hidden
+      modalElement.addEventListener('hidden.bs.modal', function () {
+        // Dispose of the modal instance to free up memory
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) {
+          modalInstance.dispose();
+        }
+        // Remove the modal element from the DOM
+        modalElement.remove();
+      });
+    }
+
+    // Open assignment modal
+    function openAssignmentModal(courseId) {
+      // Reset modal to create assignment mode
+      document.getElementById('assignmentModalLabel').textContent = 'Create Assignment';
+      document.getElementById('assignmentForm').style.display = 'block';
+      document.getElementById('submissionsDivider').style.display = 'block';
+      document.getElementById('submissionsHeading').style.display = 'block';
+      
+      document.getElementById('assignmentCourseId').value = courseId;
+      document.getElementById('assignmentForm').reset();
+      document.getElementById('submissionsList').innerHTML = '<p class="text-muted">No submissions to display.</p>';
+      new bootstrap.Modal(document.getElementById('assignmentModal')).show();
+    }
+
+    // Open grade modal
+    function openGradeModal(submissionId) {
+      document.getElementById('gradeSubmissionId').value = submissionId;
+      document.getElementById('gradeForm').reset();
+      // Hide assignment modal and show grade modal
+      const assignmentModal = document.getElementById('assignmentModal');
+      const assignmentModalInstance = bootstrap.Modal.getInstance(assignmentModal);
+      if (assignmentModalInstance) {
+        assignmentModalInstance.hide();
+      }
+      new bootstrap.Modal(document.getElementById('gradeModal')).show();
+    }
+
+    // Open forum modal
+    function openForumModal(courseId) {
+      document.getElementById('forumCourseId').value = courseId;
+      document.getElementById('forumPostTitle').value = '';
+      document.getElementById('forumPostContent').value = '';
+      new bootstrap.Modal(document.getElementById('forumModal')).show();
+      loadForumPosts(courseId);
+    }
+
+    // Open materials modal
+    function openMaterialsModal(courseId) {
+      document.getElementById('materialsCourseId').value = courseId;
+      document.getElementById('materialTitle').value = '';
+      document.getElementById('materialFile').value = '';
+      new bootstrap.Modal(document.getElementById('materialsModal')).show();
+      loadMaterials(courseId);
+    }
+
+    // Open edit course modal
+    function openEditCourseModal(courseId) {
+      // Fetch course details
+      fetch(`${API_BASE_URL}/courses/${courseId}`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => response.json())
+      .then(course => {
+        // Populate form with course data
+        document.getElementById('editCourseId').value = course._id;
+        document.getElementById('editCourseTitle').value = course.title;
+        document.getElementById('editCourseDesc').value = course.description;
+        document.getElementById('editCourseDuration').value = course.duration;
+        document.getElementById('editCourseVideo').value = course.video || '';
+        
+        // Clear media input
+        document.getElementById('editCourseMedia').value = '';
+        
+        // Show modal
+        new bootstrap.Modal(document.getElementById('editCourseModal')).show();
+      })
+      .catch(error => {
+        console.error('Error fetching course:', error);
+        alert('Failed to load course details.');
+      });
+    }
+
+    // Load forum posts
+    function loadForumPosts(courseId) {
+      // In a real implementation, this would fetch from the backend
+      // For now, we'll simulate with localStorage
+      const forumPosts = JSON.parse(localStorage.getItem(`forumPosts_${courseId}`)) || [];
+      const forumPostsList = document.getElementById('forumPostsList');
+      
+      if (forumPosts.length === 0) {
+        forumPostsList.innerHTML = `
+          <div class="text-center p-4">
+            <i class="bi bi-chat-dots" style="font-size: 3rem; color: #6c757d;"></i>
+            <h5 class="mt-3">No discussion posts yet</h5>
+            <p class="text-muted">Be the first to start a discussion in this course</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let postsHtml = '<div class="list-group">';
+      forumPosts.forEach(post => {
+        postsHtml += `
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <h6><i class="bi bi-chat-square-text me-2 text-primary"></i>${post.title}</h6>
+              <small class="text-muted">${new Date(post.date).toLocaleString()}</small>
+            </div>
+            <p class="mb-2">${post.content}</p>
+          </div>
+        `;
+      });
+      postsHtml += '</div>';
+      forumPostsList.innerHTML = postsHtml;
+    }
+
+    // View enrollments for a course
+    function viewEnrollments(courseId) {
+      // Fetch enrollments from the backend
+      fetch(API_BASE_URL + '/enrollments/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(enrollments => {
+        // Create a modal to display enrollments
+        let modalHtml = `
+          <div class="modal fade" id="enrollmentsModal" tabindex="-1" aria-labelledby="enrollmentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="enrollmentsModalLabel">Enrolled Students</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Student</th>
+                          <th>Email</th>
+                          <th>Enrollment Date</th>
+                          <th>Streak</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+        `;
+        
+        if (enrollments.length === 0) {
+          modalHtml += `
+            <tr>
+              <td colspan="4" class="text-center">No students enrolled yet.</td>
+            </tr>
+          `;
+        } else {
+          enrollments.forEach(function(enrollment, index) {
+            // Get profile photo or default
+            const profilePhotoUrl = enrollment.student.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            
+            modalHtml += `
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="${profilePhotoUrl}" alt="Profile" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                    <span>${enrollment.student.name}</span>
+                  </div>
+                </td>
+                <td>${enrollment.student.email}</td>
+                <td>${new Date(enrollment.createdAt).toLocaleDateString()}</td>
+                <td>${enrollment.streak || 0} days</td>
+              </tr>
+            `;
+          });
+        }
+        
+        modalHtml += `
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add modal to body
+        if (document.getElementById('enrollmentsModal')) {
+          document.getElementById('enrollmentsModal').remove();
+        }
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Show the modal
+        new bootstrap.Modal(document.getElementById('enrollmentsModal')).show();
+        
+        // Remove modal from DOM when closed
+        document.getElementById('enrollmentsModal').addEventListener('hidden.bs.modal', function () {
+          document.getElementById('enrollmentsModal').remove();
+        });
+      })
+      .catch(function(error) {
+        console.error('Error fetching enrollments:', error);
+        alert('Failed to fetch enrollments: ' + error.message);
+      });
+    }
+
+    // Add forum post
+    function addFacultyForumPost() {
+      const courseId = document.getElementById('facultyForumCourseSelect').value;
+      const title = document.getElementById('facultyForumPostTitle').value.trim();
+      const content = document.getElementById('facultyForumPostContent').value.trim();
+      
+      if (!courseId) {
+        alert('Please select a course first.');
+        return;
+      }
+      
+      if (!title || !content) {
+        alert('Please enter both title and content for the post.');
+        return;
+      }
+      
+      // Get existing posts
+      const forumPosts = JSON.parse(localStorage.getItem(`forumPosts_${courseId}`)) || [];
+      
+      // Add new post
+      forumPosts.push({
+        id: Date.now(),
+        title: title,
+        content: content,
+        author: loggedInUser.name,
+        date: new Date().toISOString()
+      });
+      
+      // Save to localStorage
+      localStorage.setItem(`forumPosts_${courseId}`, JSON.stringify(forumPosts));
+      
+      // Clear form
+      document.getElementById('facultyForumPostTitle').value = '';
+      document.getElementById('facultyForumPostContent').value = '';
+      
+      // Reload posts
+      loadForumPosts(courseId);
+      
+      alert('Post added successfully!');
+    }
+
+    // Load materials
+    function loadMaterials(courseId) {
+      // Load materials from the backend API to ensure consistency
+      fetch(`${API_BASE_URL}/courses/${courseId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(course => {
+        const materialsList = document.getElementById('materialsList');
+        
+        if (!course.materials || course.materials.length === 0) {
+          materialsList.innerHTML = `
+            <div class="text-center p-4">
+              <i class="bi bi-folder" style="font-size: 3rem; color: #6c757d;"></i>
+              <h5 class="mt-3">No materials uploaded yet</h5>
+              <p class="text-muted">Upload course materials for your students</p>
+            </div>
+          `;
+          return;
+        }
+        
+        let materialsHtml = '<div class="list-group">';
+        course.materials.forEach(material => {
+          // Create download URL using the proper endpoint
+          const downloadUrl = `${API_BASE_URL}/courses/download/${course._id}/${material._id}`;
+          
+          materialsHtml += `
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <h6><i class="bi bi-file-earmark me-2 text-primary"></i>${material.title}</h6>
+                <p class="mb-1"><small class="text-muted"><i class="bi bi-person me-1"></i>Uploaded by ${loggedInUser.name}</small></p>
+                <p class="mb-0"><small class="text-muted"><i class="bi bi-calendar me-1"></i>${new Date(material.uploadedAt || Date.now()).toLocaleDateString()}</small></p>
+              </div>
+              <a href="${downloadUrl}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-download me-1"></i>Download
+              </a>
+            </div>
+          `;
+        });
+        materialsHtml += '</div>';
+        
+        materialsList.innerHTML = materialsHtml;
+      })
+      .catch(error => {
+        console.error('Error loading materials from backend:', error);
+        const materialsList = document.getElementById('materialsList');
+        materialsList.innerHTML = `
+          <div class="text-center p-4">
+            <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #dc3545;"></i>
+            <h5 class="mt-3">Error loading materials</h5>
+            <p class="text-danger">Failed to load materials: ${error.message}</p>
+          </div>
+        `;
+      });
+    }
+
+    // View enrollments for a course
+    function viewEnrollments(courseId) {
+      // Fetch enrollments from the backend
+      fetch(API_BASE_URL + '/enrollments/course/' + courseId, {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(enrollments => {
+        // Create a modal to display enrollments
+        let modalHtml = `
+          <div class="modal fade" id="enrollmentsModal" tabindex="-1" aria-labelledby="enrollmentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="enrollmentsModalLabel">Enrolled Students</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Student</th>
+                          <th>Email</th>
+                          <th>Enrollment Date</th>
+                          <th>Streak</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+        `;
+        
+        if (enrollments.length === 0) {
+          modalHtml += `
+            <tr>
+              <td colspan="4" class="text-center">No students enrolled yet.</td>
+            </tr>
+          `;
+        } else {
+          enrollments.forEach(function(enrollment, index) {
+            // Get profile photo or default
+            const profilePhotoUrl = enrollment.student.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            
+            modalHtml += `
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="${profilePhotoUrl}" alt="Profile" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                    <span>${enrollment.student.name}</span>
+                  </div>
+                </td>
+                <td>${enrollment.student.email}</td>
+                <td>${new Date(enrollment.createdAt).toLocaleDateString()}</td>
+                <td>${enrollment.streak || 0} days</td>
+              </tr>
+            `;
+          });
+        }
+        
+        modalHtml += `
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add modal to body
+        if (document.getElementById('enrollmentsModal')) {
+          document.getElementById('enrollmentsModal').remove();
+        }
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Show the modal
+        new bootstrap.Modal(document.getElementById('enrollmentsModal')).show();
+        
+        // Remove modal from DOM when closed
+        document.getElementById('enrollmentsModal').addEventListener('hidden.bs.modal', function () {
+          document.getElementById('enrollmentsModal').remove();
+        });
+      })
+      .catch(function(error) {
+        console.error('Error fetching enrollments:', error);
+        alert('Failed to fetch enrollments: ' + error.message);
+      });
+    }
+
+    // Upload material (improved implementation)
+    function uploadMaterial() {
+      // Try to get courseId from the modal hidden input first, then from the select dropdown
+      let courseId = document.getElementById('materialsCourseId').value;
+      
+      // If not found in modal, try to get from the select dropdown
+      if (!courseId || courseId === '') {
+        const selectElement = document.getElementById('materialsCourseSelect');
+        if (selectElement) {
+          courseId = selectElement.value;
+        }
+      }
+      
+      const title = document.getElementById('modalMaterialTitle').value.trim();
+      const fileInput = document.getElementById('modalMaterialFile');
+      
+      // Detailed validation with specific error messages
+      if (!courseId || courseId === '') {
+        alert('Please select a course first.');
+        return;
+      }
+      
+      if (!title || title === '') {
+        alert('Please enter a material title.');
+        return;
+      }
+      
+      // Handle file upload
+      if (fileInput.files && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        
+        // Create FormData object
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('file', file);
+        
+        // Upload file using the backend API
+        fetch(API_BASE_URL + '/courses/' + courseId + '/materials/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + authToken
+          },
+          body: formData
+        })
+        .then(response => {
+          if (!response.ok) {
+            // Try to get the error message from the response
+            return response.text().then(text => {
+              let errorMessage = 'HTTP error! status: ' + response.status;
+              try {
+                const errorObj = JSON.parse(text);
+                errorMessage = errorObj.message || errorMessage;
+              } catch (e) {
+                // If parsing fails, use the raw text
+                errorMessage = text || errorMessage;
+              }
+              throw new Error(errorMessage);
+            });
+          }
+          return response.json();
+        })
+        .then(course => {
+          // Clear form
+          document.getElementById('modalMaterialTitle').value = '';
+          document.getElementById('modalMaterialFile').value = '';
+          
+          // Reload materials
+          loadMaterials(courseId);
+          
+          // Also refresh the course displays to show updated material counts
+          showCourses();
+          
+          alert('Material uploaded successfully! Students can now download it directly.');
+        })
+        .catch(error => {
+          console.error('Error uploading material:', error);
+          alert('Failed to upload material.\\nError: ' + error.message);
+        });
+      } else {
+        alert('Please select a file to upload.');
+      }
+    }
+
+    // Load assignments for assignments tab
+    function loadAllAssignments() {
+      if (!checkAuth()) return;
+      
+      const assignmentsContainer = document.getElementById('assignmentsTabContent');
+      assignmentsContainer.innerHTML = 
+        '<div class="text-center">' +
+        '  <div class="spinner-border" role="status">' +
+        '    <span class="visually-hidden">Loading...</span>' +
+        '  </div>' +
+        '</div>';
+      
+      // First get all courses for this faculty
+      fetch(API_BASE_URL + '/courses', {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(courses => {
+        // Fixed the filtering logic - now correctly compares with the faculty ID
+        const facultyCourses = courses.filter(course => {
+          // Handle both cases where faculty might be an object or just an ID
+          if (course.faculty && typeof course.faculty === 'object') {
+            return course.faculty._id === loggedInUser.id;
+          } else {
+            return course.faculty === loggedInUser.id;
+          }
+        });
+        const courseIds = facultyCourses.map(course => course._id);
+        
+        if (courseIds.length === 0) {
+          assignmentsContainer.innerHTML = 
+            '<div class="card text-center p-5">' +
+            '  <div class="mb-3">' +
+            '    <i class="bi bi-file-earmark-x" style="font-size: 3rem; color: #6c757d;"></i>' +
+            '  </div>' +
+            '  <h5>No assignments available</h5>' +
+            '  <p class="text-muted">You haven\'t created any courses yet. Create a course first to add assignments.</p>' +
+            '</div>';
+          return;
+        }
+        
+        // Get assignments for all courses
+        const assignmentPromises = courseIds.map(courseId => 
+          fetch(API_BASE_URL + '/assignments/course/' + courseId, {
+            headers: {
+              'Authorization': 'Bearer ' + authToken
+            }
+          }).then(response => response.json())
+        );
+        
+        Promise.all(assignmentPromises)
+          .then(allAssignments => {
+            // Flatten the array of assignments
+            const flattenedAssignments = [].concat(...allAssignments);
+            
+            if (flattenedAssignments.length === 0) {
+              assignmentsContainer.innerHTML = 
+                '<div class="card text-center p-5">' +
+                '  <div class="mb-3">' +
+                '    <i class="bi bi-file-earmark-x" style="font-size: 3rem; color: #6c757d;"></i>' +
+                '  </div>' +
+                '  <h5>No assignments created</h5>' +
+                '  <p class="text-muted">You haven\'t created any assignments yet. Use the "Create Assignment" button in your courses.</p>' +
+                '</div>';
+              return;
+            }
+            
+            // Group assignments by course
+            const assignmentsByCourse = {};
+            flattenedAssignments.forEach(assignment => {
+              if (!assignmentsByCourse[assignment.courseId]) {
+                assignmentsByCourse[assignment.courseId] = [];
+              }
+              assignmentsByCourse[assignment.courseId].push(assignment);
+            });
+            
+            // Create HTML for assignments grouped by course
+            let assignmentsHtml = '';
+            facultyCourses.forEach(course => {
+              if (assignmentsByCourse[course._id] && assignmentsByCourse[course._id].length > 0) {
+                assignmentsHtml += 
+                  '<div class="card mb-4">' +
+                  '  <div class="card-header">' +
+                  '    <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>' + course.title + '</h5>' +
+                  '  </div>' +
+                  '  <div class="card-body">';
+                
+                assignmentsByCourse[course._id].forEach(assignment => {
+                  assignmentsHtml += 
+                    '<div class="card assignment-card p-2 mb-2">' +
+                    '  <div class="d-flex justify-content-between">' +
+                    '    <div>' +
+                    '      <strong>' + assignment.title + '</strong>' +
+                    '      <p class="mb-1">' + assignment.description + '</p>' +
+                    '      <small class="text-muted">Due: ' + new Date(assignment.dueDate).toLocaleDateString() + '</small>' +
+                    '    </div>' +
+                    '    <button class="btn btn-sm btn-outline-info" onclick="viewSubmissions(\'' + assignment._id + '\')">' +
+                    '      <i class="bi bi-eye"></i> View Submissions' +
+                    '    </button>' +
+                    '  </div>' +
+                    '</div>';
+                });
+                
+                assignmentsHtml += 
+                  '    </div>' +
+                  '  </div>';
+              }
+            });
+            
+            assignmentsContainer.innerHTML = assignmentsHtml;
+          })
+          .catch(error => {
+            console.error('Error loading assignments:', error);
+            assignmentsContainer.innerHTML = 
+              '<div class="card text-center p-5">' +
+              '  <div class="mb-3">' +
+              '    <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem; color: #dc3545;"></i>' +
+              '  </div>' +
+              '  <h5>Failed to load assignments</h5>' +
+              '  <p class="text-danger">Error: ' + error.message + '</p>' +
+              '</div>';
+          });
+      })
+      .catch(error => {
+        console.error('Error loading courses:', error);
+        assignmentsContainer.innerHTML = 
+          '<div class="card text-center p-5">' +
+          '  <div class="mb-3">' +
+          '    <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem; color: #dc3545;"></i>' +
+          '  </div>' +
+          '  <h5>Failed to load assignments</h5>' +
+          '  <p class="text-danger">Error: ' + error.message + '</p>' +
+          '</div>';
+      });
+    }
+
+    // Load courses for forum and materials dropdowns
+    function loadCoursesForDropdowns() {
+      fetch(API_BASE_URL + '/courses', {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(courses => {
+        // Fixed the filtering logic - now correctly compares with the faculty ID
+        const facultyCourses = courses.filter(course => {
+          // Handle both cases where faculty might be an object or just an ID
+          if (course.faculty && typeof course.faculty === 'object') {
+            return course.faculty._id === loggedInUser.id;
+          } else {
+            return course.faculty === loggedInUser.id;
+          }
+        });
+        
+        // Populate forum course select
+        const forumSelect = document.getElementById('facultyForumCourseSelect');
+        forumSelect.innerHTML = '<option value="">Select a course</option>';
+        facultyCourses.forEach(course => {
+          forumSelect.innerHTML += '<option value="' + course._id + '">' + course.title + '</option>';
+        });
+        
+        // Populate materials course select
+        const materialsSelect = document.getElementById('materialsCourseSelect');
+        materialsSelect.innerHTML = '<option value="">Select a course</option>';
+        facultyCourses.forEach(course => {
+          materialsSelect.innerHTML += '<option value="' + course._id + '">' + course.title + '</option>';
+        });
+      })
+      .catch(error => {
+        console.error('Error loading courses for dropdowns:', error);
+      });
+    }
+
+    // Load selected course forum
+    function loadSelectedCourseForum() {
+      const courseId = document.getElementById('facultyForumCourseSelect').value;
+      if (!courseId) {
+        document.getElementById('facultyForumPostsList').innerHTML = '<p class="text-muted">Please select a course to view discussion posts.</p>';
+        return;
+      }
+      loadForumPosts(courseId);
+    }
+
+    // Add faculty forum post
+    function addFacultyForumPost() {
+      const courseId = document.getElementById('facultyForumCourseSelect').value;
+      const title = document.getElementById('facultyForumPostTitle').value.trim();
+      const content = document.getElementById('facultyForumPostContent').value.trim();
+      
+      if (!courseId) {
+        alert('Please select a course first.');
+        return;
+      }
+      
+      if (!title || !content) {
+        alert('Please enter both title and content for the post.');
+        return;
+      }
+      
+      // Get existing posts
+      const forumPosts = JSON.parse(localStorage.getItem('forumPosts_' + courseId)) || [];
+      
+      // Add new post
+      forumPosts.push({
+        id: Date.now(),
+        title: title,
+        content: content,
+        author: loggedInUser.name,
+        date: new Date().toISOString()
+      });
+      
+      // Save to localStorage
+      localStorage.setItem('forumPosts_' + courseId, JSON.stringify(forumPosts));
+      
+      // Clear form
+      document.getElementById('facultyForumPostTitle').value = '';
+      document.getElementById('facultyForumPostContent').value = '';
+      
+      // Reload posts
+      loadForumPosts(courseId);
+      
+      alert('Post added successfully!');
+    }
+
+    // Load selected course materials
+    function loadSelectedCourseMaterials() {
+      const courseId = document.getElementById('materialsCourseSelect').value;
+      if (!courseId) {
+        document.getElementById('materialsList').innerHTML = '<p class="text-muted">Please select a course to view materials.</p>';
+        return;
+      }
+      loadMaterials(courseId);
+    }
+
+    // Function to load faculty statistics
+    function loadFacultyStatistics() {
+      if (!authToken) return;
+      
+      // Fetch all courses for this faculty
+      fetch(API_BASE_URL + '/courses', {
+        headers: {
+          'Authorization': 'Bearer ' + authToken
+        }
+      })
+      .then(response => response.json())
+      .then(courses => {
+        // Filter courses for current faculty
+        const facultyCourses = courses.filter(course => {
+          // Handle both cases where faculty might be an object or just an ID
+          if (course.faculty && typeof course.faculty === 'object') {
+            return course.faculty._id === loggedInUser.id;
+          } else {
+            return course.faculty === loggedInUser.id;
+          }
+        });
+        const courseIds = facultyCourses.map(course => course._id);
+        
+        // If faculty has courses, fetch enrollments for each and count total enrolled students
+        if (courseIds.length > 0) {
+          // Fetch enrollments for all faculty courses
+          const enrollmentPromises = courseIds.map(courseId => 
+            fetch(API_BASE_URL + '/enrollments/course/' + courseId, {
+              headers: {
+                'Authorization': 'Bearer ' + authToken
+              }
+            }).then(response => response.json())
+          );
+          
+          Promise.all(enrollmentPromises)
+            .then(allEnrollments => {
+              // Flatten the array of enrollments and count unique students
+              const flattenedEnrollments = [].concat(...allEnrollments);
+              const uniqueStudents = new Set(flattenedEnrollments.map(enrollment => enrollment.student._id));
+              const totalEnrolled = uniqueStudents.size;
+              
+              // Update UI with statistics
+              document.getElementById('enrolledStudentsCount').textContent = totalEnrolled;
+              // For active students, we'll use the same count since we don't have activity data
+              document.getElementById('activeStudentsCount').textContent = totalEnrolled;
+            })
+            .catch(error => {
+              console.error('Error loading enrollments:', error);
+              document.getElementById('enrolledStudentsCount').textContent = '0';
+              document.getElementById('activeStudentsCount').textContent = '0';
+            });
+        } else {
+          // No courses, so no enrolled students
+          document.getElementById('enrolledStudentsCount').textContent = '0';
+          document.getElementById('activeStudentsCount').textContent = '0';
+        }
+      })
+      .catch(error => {
+        console.error('Error loading faculty courses:', error);
+        document.getElementById('enrolledStudentsCount').textContent = '0';
+        document.getElementById('activeStudentsCount').textContent = '0';
+      });
+    }
+
+    // Show loading state
+    function showLoading(buttonId, loadingId) {
+      const button = document.getElementById(buttonId);
+      const loading = document.getElementById(loadingId);
+      const buttonText = button.querySelector('.button-text');
+      
+      loading.style.display = 'inline-block';
+      buttonText.style.display = 'none';
+      button.disabled = true;
+    }
+
+    // Hide loading state
+    function hideLoading(buttonId, loadingId) {
+      const button = document.getElementById(buttonId);
+      const loading = document.getElementById(loadingId);
+      const buttonText = button.querySelector('.button-text');
+      
+      loading.style.display = 'none';
+      buttonText.style.display = 'inline-block';
+      button.disabled = false;
+    }
+
+    // On form submit - save new course
+    document.getElementById('courseForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = document.getElementById('courseTitle').value.trim();
+      const description = document.getElementById('courseDesc').value.trim();
+      const duration = document.getElementById('courseDuration').value.trim();
+      const video = document.getElementById('courseVideo').value.trim();
+      const mediaFile = document.getElementById('courseMedia').files[0];
+
+      // Simple validation
+      if (!title || !description || !duration) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      showLoading('courseForm', 'courseFormLoading');
+      
+      // Handle media upload if provided
+      if (mediaFile) {
+        // In a real implementation, you would upload the file to a server
+        // and get a URL back. For now, we'll just create a temporary URL.
+        const mediaUrl = URL.createObjectURL(mediaFile);
+        
+        // Create course with media as initial material
+        fetch(`${API_BASE_URL}/courses`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ 
+            title, 
+            description, 
+            duration: parseInt(duration), 
+            video,
+            materials: [{
+              title: mediaFile.name,
+              url: mediaUrl
+            }]
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            return response.text().then(text => {
+              let errorMessage = 'Failed to create course';
+              try {
+                const errorObj = JSON.parse(text);
+                errorMessage = errorObj.message || errorMessage;
+              } catch (e) {
+                errorMessage = text || errorMessage;
+              }
+              throw new Error(errorMessage);
+            });
+          }
+          return response.json();
+        })
+        .then(course => {
+          hideLoading('courseForm', 'courseFormLoading');
+          showCourses();
+          document.getElementById('courseForm').reset();
+          // Collapse the form
+          const collapseElement = document.getElementById('courseFormContainer');
+          const bsCollapse = new bootstrap.Collapse(collapseElement, {
+            hide: true
+          });
+        })
+        .catch(error => {
+          hideLoading('courseForm', 'courseFormLoading');
+          console.error('Error:', error);
+          alert('Failed to create course: ' + error.message);
+        });
+      } else {
+        // Create course without media
+        fetch(`${API_BASE_URL}/courses`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ title, description, duration: parseInt(duration), video })
+        })
+        .then(response => {
+          if (!response.ok) {
+            return response.text().then(text => {
+              let errorMessage = 'Failed to create course';
+              try {
+                const errorObj = JSON.parse(text);
+                errorMessage = errorObj.message || errorMessage;
+              } catch (e) {
+                errorMessage = text || errorMessage;
+              }
+              throw new Error(errorMessage);
+            });
+          }
+          return response.json();
+        })
+        .then(course => {
+          hideLoading('courseForm', 'courseFormLoading');
+          showCourses();
+          document.getElementById('courseForm').reset();
+          // Collapse the form
+          const collapseElement = document.getElementById('courseFormContainer');
+          const bsCollapse = new bootstrap.Collapse(collapseElement, {
+            hide: true
+          });
+        })
+        .catch(error => {
+          hideLoading('courseForm', 'courseFormLoading');
+          console.error('Error:', error);
+          alert('Failed to create course: ' + error.message);
+        });
+      }
+    });
+
+    // Assignment form submit
+    document.getElementById('assignmentForm').addEventListener('submit', e => {
+      e.preventDefault();
+      
+      const editingAssignmentId = document.getElementById('editingAssignmentId')?.value;
+      const courseId = document.getElementById('assignmentCourseId').value;
+      const title = document.getElementById('assignmentTitle').value.trim();
+      const description = document.getElementById('assignmentDescription').value.trim();
+      const dueDate = document.getElementById('assignmentDueDate').value;
+      
+      // AI Grading fields
+      const enableAIGrading = document.getElementById('enableAIGrading').checked;
+      const sampleSolution = document.getElementById('sampleSolution').value.trim();
+      const gradingCriteria = document.getElementById('gradingCriteria').value.trim();
+      
+      if (!title || !description || !dueDate) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      // If AI grading is enabled, sample solution is required
+      if (enableAIGrading && !sampleSolution) {
+        alert('Please provide a sample solution for AI grading.');
+        return;
+      }
+      
+      showLoading('assignmentForm', 'assignmentFormLoading');
+      
+      // Determine if we're creating or updating
+      const isEditing = editingAssignmentId && editingAssignmentId !== '';
+      const url = isEditing ? `${API_BASE_URL}/assignments/${editingAssignmentId}` : `${API_BASE_URL}/assignments`;
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      const requestData = isEditing ? 
+        { title, description, dueDate, enableAIGrading, sampleSolution, gradingCriteria } : 
+        { title, description, dueDate, courseId, enableAIGrading, sampleSolution, gradingCriteria };
+      
+      fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(requestData)
+      })
+      .then(response => response.json())
+      .then(assignment => {
+        hideLoading('assignmentForm', 'assignmentFormLoading');
+        // Close modal and refresh courses
+        bootstrap.Modal.getInstance(document.getElementById('assignmentModal')).hide();
+        showCourses();
+        
+        // Add notification
+        if (isEditing) {
+          addNotification('Assignment Updated', `You have updated assignment: ${title}`);
+        } else {
+          addNotification('New Assignment Created', `You have created a new assignment: ${title}`);
+        }
+        
+        // Clean up editing field
+        const hiddenIdField = document.getElementById('editingAssignmentId');
+        if (hiddenIdField) {
+          hiddenIdField.remove();
+        }
+      })
+      .catch(error => {
+        hideLoading('assignmentForm', 'assignmentFormLoading');
+        console.error('Error:', error);
+        alert(isEditing ? 'Failed to update assignment.' : 'Failed to create assignment.');
+      });
+    });
+
+    // Grade form submit
+    document.getElementById('gradeForm').addEventListener('submit', e => {
+      e.preventDefault();
+      
+      const submissionId = document.getElementById('gradeSubmissionId').value;
+      const score = document.getElementById('gradeScore').value;
+      const feedback = document.getElementById('gradeFeedback').value.trim();
+      
+      if (!score) {
+        alert('Please enter a score.');
+        return;
+      }
+      
+      showLoading('gradeForm', 'gradeFormLoading');
+      
+      fetch(`${API_BASE_URL}/submissions/${submissionId}/grade`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ score, feedback })
+      })
+      .then(response => response.json())
+      .then(submission => {
+        hideLoading('gradeForm', 'gradeFormLoading');
+        // Close modal and refresh courses
+        const gradeModal = document.getElementById('gradeModal');
+        const gradeModalInstance = bootstrap.Modal.getInstance(gradeModal);
+        if (gradeModalInstance) {
+          gradeModalInstance.hide();
+        }
+        new bootstrap.Modal(document.getElementById('assignmentModal')).show();
+        // We would need to refresh submissions here in a real app
+        
+        // Add notification about grading
+        addNotification('Assignment Graded', `You have graded an assignment. Score: ${score}/100`);
+      })
+      .catch(error => {
+        hideLoading('gradeForm', 'gradeFormLoading');
+        console.error('Error:', error);
+        alert('Failed to submit grade.');
+      });
+    });
+
+    // Edit course form submit
+    document.getElementById('editCourseForm').addEventListener('submit', e => {
+      e.preventDefault();
+      
+      const courseId = document.getElementById('editCourseId').value;
+      const title = document.getElementById('editCourseTitle').value.trim();
+      const description = document.getElementById('editCourseDesc').value.trim();
+      const duration = document.getElementById('editCourseDuration').value.trim();
+      const video = document.getElementById('editCourseVideo').value.trim();
+      const mediaFile = document.getElementById('editCourseMedia').files[0];
+      
+      // Simple validation
+      if (!title || !description || !duration) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      showLoading('editCourseForm', 'editCourseFormLoading');
+      
+      // Handle media upload if provided
+      if (mediaFile) {
+        // In a real implementation, you would upload the file to a server
+        // and get a URL back. For now, we'll just create a temporary URL.
+        const mediaUrl = URL.createObjectURL(mediaFile);
+        
+        // Add to materials
+        fetch(`${API_BASE_URL}/courses/${courseId}/materials`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ 
+            title: mediaFile.name,
+            url: mediaUrl
+          })
+        })
+        .then(response => response.json())
+        .then(course => {
+          // Now update the course details
+          return fetch(`${API_BASE_URL}/courses/${courseId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ title, description, duration, video })
+          });
+        })
+        .then(response => response.json())
+        .then(course => {
+          hideLoading('editCourseForm', 'editCourseFormLoading');
+          // Close modal and refresh courses
+          bootstrap.Modal.getInstance(document.getElementById('editCourseModal')).hide();
+          showAllCourses();
+          showCourses();
+          alert('Course updated successfully!');
+        })
+        .catch(error => {
+          hideLoading('editCourseForm', 'editCourseFormLoading');
+          console.error('Error:', error);
+          alert('Failed to update course.');
+        });
+      } else {
+        // Update course without media
+        fetch(`${API_BASE_URL}/courses/${courseId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ title, description, duration, video })
+        })
+        .then(response => response.json())
+        .then(course => {
+          hideLoading('editCourseForm', 'editCourseFormLoading');
+          // Close modal and refresh courses
+          const editCourseModal = document.getElementById('editCourseModal');
+          const editCourseModalInstance = bootstrap.Modal.getInstance(editCourseModal);
+          if (editCourseModalInstance) {
+            editCourseModalInstance.hide();
+          }
+          showAllCourses();
+          showCourses();
+          alert('Course updated successfully!');
+        })
+        .catch(error => {
+          hideLoading('editCourseForm', 'editCourseFormLoading');
+          console.error('Error:', error);
+          alert('Failed to update course.');
+        });
+      }
+    });
+
+    // Logout functionality
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('notifications');
+      window.location.href = 'login.html';
+    });
+
+    // Notifications functionality
+    document.getElementById('notificationsLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      showNotifications();
+    });
+
+    // Load courses on page load
+    window.onload = function() {
+      if (checkAuth()) {
+        showCourses();
+        loadFacultyStatistics(); // Load statistics when page loads
+      }
+    };
+
+    // Load content based on active tab
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up tab event listeners
+      document.getElementById('my-courses-tab').addEventListener('shown.bs.tab', function (e) {
+        showCourses();
+      });
+      
+      document.getElementById('assignments-tab').addEventListener('shown.bs.tab', function (e) {
+        loadAllAssignments();
+      });
+      
+      document.getElementById('leaderboard-tab').addEventListener('shown.bs.tab', function (e) {
+        loadCoursesForLeaderboard();
+        document.getElementById('facultyLeaderboardContent').innerHTML = '<p class="text-muted">Please select a course to view the leaderboard.</p>';
+      });
+      
+      document.getElementById('forum-tab').addEventListener('shown.bs.tab', function (e) {
+        loadCoursesForDropdowns();
+        document.getElementById('facultyForumPostsList').innerHTML = '<p class="text-muted">Please select a course to view discussion posts.</p>';
+      });
+      
+      document.getElementById('materials-tab').addEventListener('shown.bs.tab', function (e) {
+        loadCoursesForDropdowns();
+        document.getElementById('materialsList').innerHTML = '<p class="text-muted">Please select a course to view materials.</p>';
+      });
+      
+      // Handle collapsible course form icon change
+      const collapseElement = document.getElementById('courseFormContainer');
+      const chevronIcon = document.querySelector('.card-header .bi-chevron-down');
+      
+      collapseElement.addEventListener('hide.bs.collapse', function () {
+        chevronIcon.classList.remove('bi-chevron-up');
+        chevronIcon.classList.add('bi-chevron-down');
+      });
+      
+      collapseElement.addEventListener('show.bs.collapse', function () {
+        chevronIcon.classList.remove('bi-chevron-down');
+        chevronIcon.classList.add('bi-chevron-up');
+      });
+      
+      // Add event listeners for proper modal cleanup
+      const modals = [
+        'assignmentModal',
+        'gradeModal',
+        'forumModal',
+        'materialsModal',
+        'editCourseModal',
+        'notificationsModal'
+      ];
+      
+      modals.forEach(modalId => {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.addEventListener('hidden.bs.modal', function () {
+            // Dispose of the modal instance to free up memory
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+              modalInstance.dispose();
+            }
+          });
+        }
+      });
+    });
+
+    // View submissions for an assignment
+    function viewSubmissions(assignmentId) {
+      // Debug: Log the assignment ID to console
+      console.log('Viewing submissions for assignment ID:', assignmentId);
+      
+      // Validate assignmentId
+      if (!assignmentId) {
+        console.error('Invalid assignment ID');
+        return;
+      }
+      
+      // Update modal to submissions view mode
+      document.getElementById('assignmentModalLabel').textContent = 'Assignment Submissions';
+      document.getElementById('assignmentForm').style.display = 'none';
+      document.getElementById('submissionsDivider').style.display = 'block';
+      document.getElementById('submissionsHeading').style.display = 'block';
+      
+      // Show loading indicator
+      document.getElementById('submissionsList').innerHTML = `
+        <div class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      `;
+      
+      // Show the modal
+      const modal = new bootstrap.Modal(document.getElementById('assignmentModal'));
+      modal.show();
+      
+      // Check if authToken exists
+      if (!authToken) {
+        console.error('No auth token found');
+        document.getElementById('submissionsList').innerHTML = '<p class="text-danger">Authentication error. Please log in again.</p>';
+        return;
+      }
+      
+      // Fetch and display submissions
+      fetch(`${API_BASE_URL}/submissions/assignment/${assignmentId}`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => {
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(submissions => {
+        console.log('Submissions data:', submissions);
+        let submissionsHtml = '';
+        if (!submissions || submissions.length === 0) {
+          submissionsHtml = '<p class="text-muted">No submissions yet.</p>';
+        } else {
+          submissionsHtml = '<div class="table-responsive"><table class="table table-striped"><thead><tr><th>Student</th><th>Submission Date</th><th>Submission</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+          
+          submissions.forEach(submission => {
+            // Ensure student object exists
+            const studentName = submission.student && submission.student.name ? submission.student.name : 'Unknown Student';
+            const submissionText = submission.submissionText || 'No submission text';
+            
+            submissionsHtml += `
+              <tr>
+                <td>${studentName}</td>
+                <td>${new Date(submission.createdAt).toLocaleDateString()}</td>
+                <td><button class="btn btn-sm btn-outline-info" onclick="showSubmissionText('${submission._id}')">View</button></td>
+                <td>${submission.grade && submission.grade.score !== undefined ? (submission.grade.isAIGrade ? 'AI Graded' : 'Graded') : 'Pending'}</td>
+                <td>
+                  ${submission.grade && submission.grade.score !== undefined ? 
+                    `<div class="d-flex flex-column align-items-start">
+                      <span class="badge bg-success mb-1">${submission.grade.score}/100</span>
+                      ${submission.grade.isAIGrade ? 
+                        `<div class="btn-group btn-group-sm" role="group">
+                          <button class="btn btn-outline-primary" onclick="reEvaluateSubmission('${submission._id}', '${assignmentId}')">Re-evaluate</button>
+                        </div>` : 
+                        `<div class="btn-group btn-group-sm" role="group">
+                          <button class="btn btn-outline-success" onclick="aiGradeSubmission('${submission._id}', '${assignmentId}')">AI Grade</button>
+                        </div>`
+                      }
+                    </div>` :
+                    `<div class="btn-group" role="group">
+                      <button class="btn btn-sm btn-primary" onclick="openGradeModal('${submission._id}')">Manual Grade</button>
+                      <button class="btn btn-sm btn-success" onclick="aiGradeSubmission('${submission._id}', '${assignmentId}')">AI Grade</button>
+                    </div>`
+                  }
+                </td>
+              </tr>
+            `;
+          });
+          
+          submissionsHtml += '</tbody></table></div>';
+          
+          // Add hidden divs to store submission texts
+          submissionsHtml += '<div id="submissionTexts" style="display:none;">';
+          submissions.forEach(submission => {
+            submissionsHtml += `<div id="submission-${submission._id}">${submission.submissionText || 'No submission text'}</div>`;
+          });
+          submissionsHtml += '</div>';
+        }
+        
+        document.getElementById('submissionsList').innerHTML = submissionsHtml;
+      })
+      .catch(error => {
+        console.error('Error fetching submissions:', error);
+        document.getElementById('submissionsList').innerHTML = `<p class="text-danger">Failed to load submissions: ${error.message}</p>`;
+      });
+    }
+
+    // AI Grade submission
+    function aiGradeSubmission(submissionId, assignmentId) {
+      // Confirm with user before AI grading
+      if (!confirm('Are you sure you want to grade this submission with AI? This will automatically assign a score based on the sample solution.')) {
+        return;
+      }
+      
+      fetch(`${API_BASE_URL}/submissions/${submissionId}/ai-grade`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => {
+        // Check if response is OK before trying to parse JSON
+        if (!response.ok) {
+          return response.text().then(text => {
+            // Try to parse as JSON, but if it fails, return the text
+            try {
+              return JSON.parse(text);
+            } catch (e) {
+              // If it's not JSON, it might be an HTML error page
+              throw new Error(`HTTP ${response.status}: ${text.substring(0, 100)}...`);
+            }
+          }).then(err => { throw new Error(err.message || 'Unknown error'); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const score = data.submission.grade && data.submission.grade.score !== undefined ? data.submission.grade.score : 'N/A';
+        alert(`Submission AI graded successfully!\nScore: ${score}/100`);
+        // Refresh submissions
+        viewSubmissions(assignmentId);
+      })
+      .catch(error => {
+        console.error('Error AI grading submission:', error);
+        alert(`Failed to AI grade submission: ${error.message}`);
+      });
+    }
+
+    // Re-evaluate submission with AI
+    function reEvaluateSubmission(submissionId, assignmentId) {
+      // Confirm with user before re-evaluating
+      if (!confirm('Are you sure you want to re-evaluate this submission with AI? This will overwrite the current AI grade.')) {
+        return;
+      }
+      
+      fetch(`${API_BASE_URL}/submissions/${submissionId}/ai-grade`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        }
+      })
+      .then(response => {
+        // Check if response is OK before trying to parse JSON
+        if (!response.ok) {
+          return response.text().then(text => {
+            // Try to parse as JSON, but if it fails, return the text
+            try {
+              return JSON.parse(text);
+            } catch (e) {
+              // If it's not JSON, it might be an HTML error page
+              throw new Error(`HTTP ${response.status}: ${text.substring(0, 100)}...`);
+            }
+          }).then(err => { throw new Error(err.message || 'Unknown error'); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const score = data.submission.grade && data.submission.grade.score !== undefined ? data.submission.grade.score : 'N/A';
+        alert(`Submission re-evaluated successfully!\nScore: ${score}/100`);
+        // Refresh submissions
+        viewSubmissions(assignmentId);
+      })
+      .catch(error => {
+        console.error('Error re-evaluating submission:', error);
+        alert(`Failed to re-evaluate submission: ${error.message}`);
+      });
+    }
+
+    // Handle collapsible course form icon change
+    document.addEventListener('DOMContentLoaded', function() {
+      const collapseElement = document.getElementById('courseFormContainer');
+      const chevronIcon = document.querySelector('.card-header .bi-chevron-down');
+      
+      collapseElement.addEventListener('hide.bs.collapse', function () {
+        chevronIcon.classList.remove('bi-chevron-up');
+        chevronIcon.classList.add('bi-chevron-down');
+      });
+      
+      collapseElement.addEventListener('show.bs.collapse', function () {
+        chevronIcon.classList.remove('bi-chevron-down');
+        chevronIcon.classList.add('bi-chevron-up');
+      });
+    });
+
+    // Initialize on page load
+    window.onload = function() {
+      console.log('Faculty dashboard loaded');
+      if (checkAuth()) {
+        showCourses();
+      }
+    };
+  </script>
+
+</body>
+</html>
